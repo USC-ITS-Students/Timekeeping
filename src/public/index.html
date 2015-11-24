@@ -3,8 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Timesheet Historial</title>
+
+    <!-- vendor -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-beta.2/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.5.0-beta.2/angular-route.js"></script>
+
+    <!-- internal -->
+    <script src="main.js"></script>
+    <script src="modules/home/home.js"></script>
+
 </head>
-<body>
-    Hello, world!
+<body ng-app="app">
+    <div ng-view>
+        <!-- This is where module views get displayed -->
+    </div>
 </body>
 </html>
