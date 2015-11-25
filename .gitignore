@@ -21,3 +21,4 @@ fabric.properties
 
 node_modules
 npm-debug.log
+test_reports
