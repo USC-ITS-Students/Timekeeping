@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var PORT = 3000;
 
 var app = express();
 
@@ -17,5 +18,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Import api routes
 app.use('/api', require('./routes/index'));
+
+//For docker test
+app.listen(PORT);
+console.log('Running on http://localhost:' + PORT);
 
 module.exports = app;
