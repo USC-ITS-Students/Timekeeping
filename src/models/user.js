@@ -9,14 +9,14 @@ var EmployeeModel = {
     supervisors: [],
     timesheets: [
         {
-            start: String,
-            end: String,
+            start: Date,
+            end: Date,
             total_hours: Number,
             timesheet_item: {
                 organization: String,
-                punch_in: String,
-                punch_out: String,
-                date: String
+                punch_in: Date,
+                punch_out: Date,
+                date: Date
             }
         }
     ]
@@ -37,14 +37,14 @@ function getEmployee() {
         supervisors: [],
         timesheets: [
             {
-                start: '1/1/16',
-                end: '1/15/16',
+                start: new Date('1/1/16'),
+                end: new Date('1/15/16'),
                 total_hours: 80,
                 timesheet_item: {
-                    date: '1/1/16',
+                    date: new Date('1/1/16'),
                     organization: 'USC ITS',
-                    punch_in: '9:00 AM',
-                    punch_out: '5:00 PM'
+                    punch_in: new Date('1/1/16T09:00:00'),
+                    punch_out: new Date('1/1/16T17:00:00')
                 }
             }
         ]
