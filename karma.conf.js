@@ -4,16 +4,19 @@
 module.exports = function(config) {
   config.set({
 
-
+    // start these browsers
+    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+    browsers: ['PhantomJS'],
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
 
     //plugins
     plugins : [
-        'karma-phantomjs-launcher',
         'karma-jasmine',
-        'karma-junit-reporter'
+        'karma-requirejs',
+        'karma-junit-reporter',
+        'karma-phantomjs-launcher'
     ],
 
     // frameworks to use
@@ -25,7 +28,7 @@ module.exports = function(config) {
     files: [
         'node_modules/angular/angular.js',
         'node_modules/angular-mocks/angular-mocks.js',
-        //'src/**.js', uncomment when have testable code
+        'src/**.js',
         'tests/**.js'
     ],
 
@@ -67,12 +70,6 @@ module.exports = function(config) {
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
-
-
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
-
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
