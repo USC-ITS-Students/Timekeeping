@@ -8,6 +8,9 @@ var PORT = 3000;
 var mongoose = require('mongoose');
 var app = express();
 
+var routes = require('./routes/index');
+var loginController = require('./routes/api/login');
+
 mongoose.connect('mongodb://localhost:27017/timedb');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -18,6 +21,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Import api routes
-app.use('/api', require('./routes/index'));
+app.use('/', routes);
+app.use('/api', loginController);
 
 module.exports = app;
