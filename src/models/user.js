@@ -1,6 +1,8 @@
 // Models ---
 
-var EmployeeModel = {
+var mongoose = require('mongoose');
+
+var Employee = new mongoose.Schema({
     netid: String,
     empid: String,
     firstname: String,
@@ -20,7 +22,7 @@ var EmployeeModel = {
             }
         }
     ]
-};
+});
 
 
 // Functions ---
@@ -54,5 +56,5 @@ function getEmployee() {
 }
 
 // Exports ---
-
+module.exports = mongoose.model('User', Employee)
 module.exports.getEmployee = getEmployee;

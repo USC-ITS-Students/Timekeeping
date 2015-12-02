@@ -5,9 +5,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var PORT = 3000;
-
+var mongoose = require('mongoose');
 var app = express();
 
+mongoose.connect('mongodb://localhost:27017/timedb');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
