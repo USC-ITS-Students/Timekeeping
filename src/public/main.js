@@ -9,6 +9,17 @@ app.config(function($routeProvider){
             templateUrl : 'modules/home/home.html',
             controller : 'homeController'
         })
+
+        .when('/history', {
+            templateUrl: 'modules/history_report/timesheet_history.html',
+            controller: 'historyController'
+        })
+
+        .when('/period_detail', {
+            templateUrl: 'modules/history_report/timesheet_history_detail.html',
+            controller: 'historyController'
+        })
+
         // Default
         .otherwise({
             redirect: '/'

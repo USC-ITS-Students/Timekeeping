@@ -1,0 +1,57 @@
+#login{
+    vertical-align: middle;
+    padding-top:10%;
+    /*background-color:#990000;
+    position:absolute;
+    top:0; right:0;
+    bottom:0; left:0;*/
+}
+
+#login p{
+    display:inline;
+}
+
+#history_report{
+    padding: 10px;
+}
+
+#employee_overview tr td{
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+#pay-detail-week input{
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    height: 25px;
+}
+
+#pay-period-table thead, #pay-detail-week thead{
+    background-color: #990000;
+    color: #FFCC00;
+}
+
+.content-msg{
+    width: 25%;
+    text-align:right;
+}
+
+#pay-period-table #period-dates a{
+    color: #990000;
+}
+
+#employee_overview tr td{
+    background-color: white;
+}
+
+#employee_overview table{
+    border: none;
+}
+
+h1,h2,h3,h4,h5,h6{
+    color: #990000;
+}
+
+ul {
+    list-style-type: none;
+}

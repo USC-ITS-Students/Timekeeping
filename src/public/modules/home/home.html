@@ -1,1 +1,18 @@
-{{message}}
+<form id="login" ng-submit="submit()">
+    <div class="row">
+        <div class="medium-4 medium-centered columns">
+            <input id="user" type="text" placeholder="Username" ng-model="username" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="medium-4 medium-centered columns">
+            <input id="pwd" type="password" placeholder="Password" ng-model="password" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="medium-4 medium-centered medium-text-right columns">
+            <p ng-show="login_error">{{incomplete_fields_error}}</p>
+            <input id="submit-button" type="submit" />
+        </div>
+    </div>
+</form>
