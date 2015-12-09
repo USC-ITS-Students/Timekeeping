@@ -1,42 +1,150 @@
-﻿<div id="history_report">
+﻿<div id="history_detail_report" class="padding-10">
     <h4>Timesheet History</h4>
-    <div>
-        <table id="employee_overview">
-            <tr><td>Employee Name</td><td>{{employee.name}}</td></tr>
-            <tr><td>Employee ID Number</td><td>{{employee.id}}</td></tr>
-            <tr><td>Time Sheet Status</td><td>Approved</td></tr>
-            <tr><td>Period</td><td>00/00/00</td></tr>
-
-        </table>
+    <div class="row" id="overview">
+        <div class="columns large-10 small-10 columns">
+            <table id="employee_overview" class="border-none">
+                <tr>
+                    <td class="font-bold">Employee Name</td>
+                    <td class="width-35p">{{employee.name}}</td>
+                    <td class="font-bold">Time Sheet Status</td>
+                    <td>Approved</td>
+                </tr>
+                <tr>
+                    <td class="font-bold">Employee ID Number</td>
+                    <td>{{employee.id}}</td>
+                    <td class="font-bold">Period Ending Date</td>
+                    <td>00/00/00</td>
+                </tr>
+                <tr>
+                    <td class="font-bold">Supervisory Organization</td>
+                    <td>Payroll Services</td>
+                    <td class="font-bold">Meal Waiver 1</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td class="font-bold">Supervisor Name</td>
+                    <td>Don Corley</td>
+                    <td class="font-bold">Meal Waiver 2</td>
+                    <td>No</td>
+                </tr>
+            </table>
+        </div>
+        <div class="large-2 small-2 columns">
+            <table class="right-align border-none" id="balance-table">
+                <tr><td colspan="2" class="bottom-border font-bold">Balance</td></tr>
+                <tr><td class="font-bold">Sick</td><td>2.0</td></tr>
+                <tr><td class="font-bold">Vacation</td><td>2.0</td></tr>
+                <tr><td class="font-bold">Winter Recess</td><td>2.0</td></tr>
+            </table>
+        </div>
     </div>
     <table id="pay-detail-week">
         <thead>
             <tr>
-                <th>Position</th>
-                <th>Time Type</th>
-                <th>Thu</th>
-                <th>Fri</th>
-                <th>Sat</th>
-                <th>Sun</th>
-                <th>Mon</th>
-                <th>Tue</th>
-                <th>Wed</th>
-                <th>Approver</th>
-                <th>Status</th>
+                <th class="width-15p">Position</th>
+                <th class="width-10p">Time Type</th>
+                <th class="text-center" ng-repeat="i in ['Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed']">{{i}}<br />00/00</th>
+                <th class="width-10p">Approver</th>
+                <th class="width-10p">Status</th>
             </tr>
         </thead>
-        <tbody class="text-center">
+        <tbody>
            <tr>
                <td>Program Assistant</td>
                <td>Regular</td>
-               <td ng-repeat="day in [1,2,4,5,6,7,8]">
+               <td ng-repeat="day in [1,2,3,4,5,6,7]">
                    <input type="text" />
                    <input type="text" />
                </td>
                <td>Don Corley</td>
                <td>Approved</td>
            </tr>
+            <tr>
+                <td>Program Assistant</td>
+                <td>Regular</td>
+                <td ng-repeat="day in [1,2,3,4,5,6,7]">
+                    <input type="text" />
+                    <input type="text" />
+                </td>
+                <td>Don Corley</td>
+                <td>Approved</td>
+            </tr>
         </tbody>
-        <tfoot></tfoot>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="width-25p font-normal">I was <u>not</u> provided the appropriate rest periods to which I am entitled under USC's policy for the following days</td>
+                <td ng-repeat="day in [1,2,4,5,6,7,8]" class="text-center"><input type="checkbox" /></td>
+                <td class="width-10p"></td>
+                <td class="width-10p"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="width-25p font-normal">I was <u>not</u> provided the appropriate meal periods to which I am entitled under USC's policy for the following days</td>
+                <td ng-repeat="day in [1,2,4,5,6,7,8]" class="text-center"><input type="checkbox" /></td>
+                <td class="width-10p"></td>
+                <td class="width-10p"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Total Hours:</td>
+                <td ng-repeat="day in [1,2,3,4,5,6,7]" class="text-center">0.00</td>
+                <td class="width-10p"></td>
+                <td class="width-10p"></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <table id="pay-detail-week2">
+        <thead>
+            <tr>
+                <th class="width-15p">Position</th>
+                <th class="width-10p">Time Type</th>
+                <th class="text-center" ng-repeat="i in ['Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed']">{{i}}<br />00/00</th>
+                <th class="width-10p">Approver</th>
+                <th class="width-10p">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Program Assistant</td>
+                <td>Regular</td>
+                <td ng-repeat="day in [1,2,3,4,5,6,7]">
+                    <input type="text" />
+                    <input type="text" />
+                </td>
+                <td>Don Corley</td>
+                <td>Approved</td>
+            </tr>
+            <tr>
+                <td>Program Assistant</td>
+                <td>Regular</td>
+                <td ng-repeat="day in [1,2,3,4,5,6,7]">
+                    <input type="text" />
+                    <input type="text" />
+                </td>
+                <td>Don Corley</td>
+                <td>Approved</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="width-25p font-normal">I was <u>not</u> provided the appropriate rest periods to which I am entitled under USC's policy for the following days</td>
+                <td ng-repeat="day in [1,2,3,4,5,6,7]" class="text-center"><input type="checkbox" /></td>
+                <td class="width-10p"></td>
+                <td class="width-10p"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="width-25p font-normal">I was <u>not</u> provided the appropriate meal periods to which I am entitled under USC's policy for the following days</td>
+                <td ng-repeat="day in [1,2,3,4,5,6,7]" class="text-center"><input type="checkbox" /></td>
+                <td class="width-10p"></td>
+                <td class="width-10p"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Total Hours:</td>
+                <td ng-repeat="day in [1,2,3,4,5,6,7]" class="text-center">0.00</td>
+                <td class="width-10p"></td>
+                <td class="width-10p"></td>
+            </tr>
+        </tfoot>
     </table>
 </div>

@@ -1,3 +1,64 @@
+/*General*/
+
+h1,h2,h3,h4,h5,h6{
+    color: #990000;
+}
+
+ul {
+    list-style-type: none;
+}
+
+a:hover{
+    text-decoration:underline;
+}
+
+.inline{
+    display:inline;
+}
+
+.padding-10{
+    padding:10px;
+}
+
+.width-15p{
+    width:15%;
+}
+
+.width-10p{
+   width:10%;
+}
+
+.width-25p{
+    width:25%;
+}
+
+.width-35p{
+    width:35%;
+}
+
+.font-normal{
+    font-weight:normal;
+}
+
+.font-bold{
+    font-weight:bold;
+}
+
+.right-align{
+    float:right;
+}
+
+.border-none{
+    border: none;
+}
+
+.bottom-border{
+    border-bottom:groove;
+    border-bottom-width:2px;
+}
+
+/*View Specific*/
+
 #login{
     vertical-align: middle;
     padding-top:10%;
@@ -7,51 +68,35 @@
     bottom:0; left:0;*/
 }
 
-#login p{
-    display:inline;
-}
-
-#history_report{
-    padding: 10px;
-}
-
-#employee_overview tr td{
+#employee_overview tr td, #overview tr td{
     padding-top: 2px;
     padding-bottom: 2px;
+    background-color: white;
 }
 
-#pay-detail-week input{
+#pay-detail-week input, #pay-detail-week2 input{
     padding-bottom: 0px;
     margin-bottom: 0px;
     height: 25px;
+    max-width:100px;
 }
 
-#pay-period-table thead, #pay-detail-week thead{
+#pay-period-table{
+    max-width:1200px;
+    min-width:955px;
+}
+
+#pay-period-table thead, #pay-detail-week thead, #pay-detail-week2 thead{
     background-color: #990000;
     color: #FFCC00;
-}
-
-.content-msg{
-    width: 25%;
-    text-align:right;
 }
 
 #pay-period-table #period-dates a{
     color: #990000;
 }
 
-#employee_overview tr td{
-    background-color: white;
-}
-
-#employee_overview table{
-    border: none;
-}
-
-h1,h2,h3,h4,h5,h6{
-    color: #990000;
-}
-
-ul {
-    list-style-type: none;
+#pay-detail-week, #pay-detail-week2, #overview{
+    min-width:1200px;
+    max-width:1330px;
+    margin-left:0px;
 }
