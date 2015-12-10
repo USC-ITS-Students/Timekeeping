@@ -4,14 +4,13 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var PORT = 3000;
 var mongoose = require('mongoose');
 var app = express();
 
 var routes = require('./routes/index');
-var loginController = require('./routes/api/login');
+var loginRoute = require('./routes/api/login');
 
-mongoose.connect('mongodb://localhost:27017/timedb');
+mongoose.connect('mongodb://test:123@ds027335.mongolab.com:27335/timedb');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -22,6 +21,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Import api routes
 app.use('/', routes);
-app.use('/api', loginController);
+app.use('/api', loginRoute);
 
 module.exports = app;

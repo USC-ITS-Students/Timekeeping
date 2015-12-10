@@ -1,5 +1,4 @@
-var router = require('express').Router(),
-    User = require('../Models/user.js');
+var router = require('express').Router();
 
 router.get('/login', function(req, res){
 

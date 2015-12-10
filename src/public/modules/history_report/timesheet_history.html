@@ -2,9 +2,9 @@
     <h4>Timesheet History Report</h4>
     <div>
         <table id="employee_overview">
-            <tr><td>Employee Name</td><td>{{employee.name}}</td></tr>
-            <tr><td>Employee ID Number</td><td>{{employee.id}}</td></tr>
-            <tr><td>Region</td><td>{{employee.region}}</td></tr>
+            <tr><td>Employee Name</td><td>{{record.firstname}} {{record.lastname}}</td></tr>
+            <tr><td>Employee ID Number</td><td>{{record.empid}}</td></tr>
+            <tr><td>Region</td><td>{{record.region}}</td></tr>
         </table>
     </div>
     <table id="pay-period-table">
@@ -23,17 +23,17 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="period in record">
-                <td id="period-dates" ng-click="getPeriodDetail()"><a>{{period.payPeriod}}</a></td>
-                <td>{{period.regular}}</td>
-                <td>{{period.overtime}}</td>
-                <td>{{period.doubletime}}</td>
-                <td>{{period.vac}}</td>
-                <td>{{period.sick}}</td>
-                <td>{{period.otherpaid}}</td>
-                <td>{{period.otherunpaid}}</td>
-                <td>{{period.totalHours}}</td>
-                <td>{{period.status}}</td>
+            <tr ng-repeat="timesheet in timesheets">
+                <td id="period-dates" ng-click="getPeriodDetail()"><a>{{timesheet.end}}</a></td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>{{timesheet.total_hours}}</td>
+                <td>Not Info</td>
             </tr>
         </tbody>
         <tfoot>
