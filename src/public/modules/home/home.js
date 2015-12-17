@@ -1,13 +1,29 @@
-angular.module('app').controller('homeController', ['$scope', '$location', function ($scope, $location, $http) {
-    
-    $scope.incomplete_fields_error = "Enter a username/password."
+angular.module('app').controller('homeController', ['$scope', '$location', '$http', function ($scope, $location, $http) {
+    $scope.netid = '';
+    $scope.password = '';
+    $scope.error_message = '';
 
     $scope.submit = function () {
-        if ($scope.username && $scope.password) {
-            $location.path('/history');
-            $scope.login_error = false;
+        if ($scope.netid && $scope.password) {
+            $http.post('/auth/login', {username:$scope.netid, password:$scope.password})
+                .then(
+                    function(){
+                        // login successful callback
+                        console.log('successful login');
+                        $scope.login_error = true;
+                        $location.url('/');
+                    },
+                    function(){
+                        // login failure callback
+                        $scope.error_message = 'Invalid netid/password';
+                        $scope.login_error = true;
+                    }
+                );
+            //$location.path('/history');
+            //$scope.login_error = false;
         }
         else {
+            $scope.error_message = 'Enter a netid/password.';
             $scope.login_error = true;
         }
     }
