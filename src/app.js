@@ -10,9 +10,6 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var cookieSession = require('cookie-session');
 
-var routes = require('./routes/index');
-var loginRoute = require('./routes/auth/login');
-
 mongoose.connect('mongodb://test:123@ds027335.mongolab.com:27335/timedb');
 
 // uncomment after placing your favicon in /public
@@ -48,6 +45,6 @@ passport.deserializeUser(function(id, done){
 });
 
 // Import api routes
-app.use('/', routes);
+app.use('/', require('./routes'));
 
 module.exports = app;
