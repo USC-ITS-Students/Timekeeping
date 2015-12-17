@@ -1,7 +1,7 @@
 <form id="login" ng-submit="submit()">
     <div class="row">
         <div class="medium-4 medium-centered columns">
-            <input id="user" type="text" placeholder="Username" ng-model="username" />
+            <input id="netid" type="text" placeholder="Netid" ng-model="netid" />
         </div>
     </div>
     <div class="row">
@@ -11,7 +11,7 @@
     </div>
     <div class="row">
         <div class="medium-4 medium-centered medium-text-right columns">
-            <p ng-show="login_error" class="inline">{{incomplete_fields_error}}</p>
+            <p ng-show="login_error" class="inline">{{error_message}}</p>
             <input id="submit-button" type="submit" value="Submit"/>
         </div>
     </div>

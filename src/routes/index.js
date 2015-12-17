@@ -1,9 +1,6 @@
 var router = require('express').Router();
 
-router.get('/login', function(req, res){
-
-    res.send('Welcome to login');
-
-});
+router.use('/auth', require('./auth'));
+router.use('/api/timesheets', require('./api/timesheets'));
 
 module.exports = router;
