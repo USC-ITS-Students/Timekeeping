@@ -17,10 +17,11 @@ def main():
 
   # Process command line arguments
   parser = argparse.ArgumentParser(description='input parameters.')
-  parser.add_argument('-d', '--database', dest = 'database', type = str, required = True, help='Database name')
-  parser.add_argument('-c', '--collection', dest = 'collection', type = str, required = True, help='Collection name')
+  parser.add_argument('-d', '--database', dest = 'database', type = str, required = True, help = 'Database name')
+  parser.add_argument('-c', '--collection', dest = 'collection', type = str, required = True, help = 'Collection name')
   parser.add_argument('-s', '--host', dest = 'host', type = str, default = 'localhost', help='Server name')
   parser.add_argument('-p', '--port', dest = 'port', type = int, default = 27017, help='Server port')
+  parser.add_argument('-f', '--file', dest = 'filename', type = str, required = True, help = 'Input data file')
   args = parser.parse_args()
 
   # Create a log file
@@ -40,7 +41,7 @@ def main():
   db = client[args.database]
 
   # Open file
-  file = codecs.open("test.txt", 'r', encoding='utf-8') # enable UTF-8 encoding
+  file = codecs.open(args.filename, 'r', encoding='utf-8') # enable UTF-8 encoding
 
   # Define regex rules
   empid_rule = re.compile(r'[0-9]+\s')
@@ -48,7 +49,7 @@ def main():
   last_rule = re.compile(r'[a-z]+\s(?=[0-9])',re.IGNORECASE)
   ts_start_rule = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s')
   ts_end_rule = re.compile(r'(?<=[0-9-]\s)[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}:59\s')
-  org_rule = re.compile(r'(?<=:[0-9]{2}\s)[a-z\s:_-]+(?=\s[a-z]+\s[0-9]{4})',re.IGNORECASE)
+  org_rule = re.compile(r'(?<=:[0-9]{2}\t)[a-z\s:,.+_-]+(?=\t[a-z]+\t[0-9]{4})',re.IGNORECASE)
   netid_rule = re.compile(r'(?<=[a-zA-Z0-9:-_]\s)[a-z]+(?=\s[0-9\-](.*?)\s[0-9]+\.[0-9]+)')
   punch_in_rule = re.compile(r'[0-9-]+\s[0-9:-]+(?=\s[0-9-]+\s[0-9:-]+\s[0-9]+\.[0-9]+)')
   punch_out_rule = re.compile(r'[0-9-]+\s[0-9:-]+(?=\s[0-9]+\.[0-9]+)')
