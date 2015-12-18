@@ -1,7 +1,12 @@
 db:
-  image: mongo
+  build: data/.
+  ports:
+   - "27017:27017"
+  command: python MongoDBImport.py -d Timesheet -c users -f data.txt
 web:
   build: .
+  ports:
+     - "8080:3000"
   # Docker file for Node.js handles redirection and source folder definition
   links:
    - db
