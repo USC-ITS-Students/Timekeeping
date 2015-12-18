@@ -1,19 +1,17 @@
 var router = require('express').Router();
 var User = require('../../models/user');
+var passport = require('passport');
 
-router.get('/overview', function (req, res) {
-    User.find({ netid: req.query.netid, empid:req.query.empid}, 'timesheets.end timesheets.total_hours', function (err, users) {
-        if (err) return console.error(err);
-        res.json(users);
-    });
-});
-
-router.get('/', function (req, res) {
-    //This route will be passed a user's id and employee id within the query. Mongo will be queried and the results displayed
-    User.find({ netid: req.query.netid, empid: req.query.empid }, 'timesheets', function (err, users) {
-        if (err) return console.error(err);
-        res.json(users);
-    });
-});
+router.get('/',
+    function(req, res){
+        // check if user is logged in
+        if(req.isAuthenticated()){
+            // user is stored in the session (req.user)
+            res.json(req.user);
+        }else{
+            res.sendStatus(401);
+        }
+    }
+);
 
 module.exports = router;

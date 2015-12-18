@@ -10,7 +10,8 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var cookieSession = require('cookie-session');
 
-mongoose.connect('mongodb://test:123@ds027335.mongolab.com:27335/timedb');
+mongoose.connect('localhost:27017/Timesheet');
+var User = require('./models/user');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -24,25 +25,35 @@ app.use(cookieSession({
     keys: ['keyboard cat', 'piano dog']
 }));
 
-// set up passport strategy
-app.use(passport.initialize());
-app.use(passport.session());
+// set up passport
 passport.use(new LocalStrategy(
-   function(netid, password, done){
-       console.log('In passport use local strategy: ' + netid + ', ' + password);
-       if(netid === 'test' && password === 'test123'){
-           return done(null, {netid:'test', first_name:'John', last_name:'Doe'})
-       } else{
-           return done(null, false);
-       }
-   }
+    function(netid, password, done){
+        if(netid === 'test' && password === 'test123'){
+            User.findOne({netid:netid}, function(err, docs){
+                if(err) return done(err);
+                else{
+                    return done(null, docs);
+                }
+            });
+        } else{
+            return done(null, false);
+        }
+    }
 ));
 passport.serializeUser(function(user, done){
     done(null, user.netid);
 });
 passport.deserializeUser(function(id, done){
-    done(null, {netid:id, first_name:'John', last_name:'Doe'});
+    User.findOne({netid:id}, function(err, docs){
+        if(err) done(err);
+        else{
+            done(null, docs);
+        }
+    });
 });
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 // Import api routes
 app.use('/', require('./routes'));
