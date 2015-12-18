@@ -15,6 +15,7 @@ var Employee = new mongoose.Schema({
             total_hours: Number,
             timesheet_item: {
                 organization: String,
+                position: String,
                 punch_in: Date,
                 punch_out: Date,
                 date: Date
