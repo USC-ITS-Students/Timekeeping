@@ -6,7 +6,5 @@ web:
    - .:/src
   links:
    - db
-  command:
-   - node /src/bin/www
 db:
   image: mongo
