@@ -44,11 +44,11 @@ def main():
   file = codecs.open(args.filename, 'r', encoding='utf-8') # enable UTF-8 encoding
 
   # Define regex rules
-  empid_rule = re.compile(r'[0-9]+\s')
-  first_rule = re.compile(r'[a-z]+\s',re.IGNORECASE)
-  last_rule = re.compile(r'[a-z]+\s(?=[0-9])',re.IGNORECASE)
-  ts_start_rule = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s')
-  ts_end_rule = re.compile(r'(?<=[0-9-]\s)[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}:59\s')
+  empid_rule = re.compile(r'[0-9]+(?!\s\t)')
+  first_rule = re.compile(r'[a-z]+(?!\s\t)',re.IGNORECASE)
+  last_rule = re.compile(r'[a-z]+(?=\t[0-9])',re.IGNORECASE)
+  ts_start_rule = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}:[0-9]{2}')
+  ts_end_rule = re.compile(r'(?<=[0-9-]\s)[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}:59')
   org_rule = re.compile(r'(?<=:[0-9]{2}\t)[a-z\s:,.+_-]+(?=\t[a-z]+\t[0-9]{4})',re.IGNORECASE)
   netid_rule = re.compile(r'(?<=[a-zA-Z0-9:-_]\s)[a-z]+(?=\s[0-9\-](.*?)\s[0-9]+\.[0-9]+)')
   punch_in_rule = re.compile(r'[0-9-]+\s[0-9:-]+(?=\s[0-9-]+\s[0-9:-]+\s[0-9]+\.[0-9]+)')
@@ -61,22 +61,44 @@ def main():
   next(file) # skip the header line
   for line in file:
     # grab the employee data
+    empid = empid_rule.match(line).group(0)
+    first = first_rule.search(line).group(0)
+    last = last_rule.search(line).group(0)
+    ts_start = ts_start_rule.search(line).group(0)
+    ts_end = ts_end_rule.search(line).group(0)
+    organization = org_rule.search(line).group(0)
+    netid = netid_rule.search(line).group(0)
+    punch_in = punch_in_rule.search(line).group(0)
+    punch_out = punch_out_rule.search(line).group(0)
+    hours = hours_rule.search(line).group(0)
+
+    # db[args.collection].find(
+    #    {
+    #       netid: { $in: [ 5,  ObjectId("507c35dd8fada716c89d0013") ] }
+    #    }
+    # )
+
     employee = {
-      "empid": empid_rule.match(line).group(0),
-      "first": first_rule.search(line).group(0),
-      "last": last_rule.search(line).group(0),
-      "ts_start": ts_start_rule.search(line).group(0),
-      "ts_end": ts_end_rule.search(line).group(0),
-      "organization": org_rule.search(line).group(0),
-      "netid": netid_rule.search(line).group(0),
-      "punch_in": punch_in_rule.search(line).group(0),
-      "punch_out": punch_out_rule.search(line).group(0),
-      "hours": hours_rule.search(line).group(0)
-    }
+      "netid": netid,
+      "empid": empid,
+      "firstname": first,
+      "lastname": last
+      }
+    
+    timesheet = {
+      "start": ts_start,
+      "end": ts_end,
+      "total_hours": hours,
+      "timesheet_item": {
+        "organization": organization,
+        "punch_in": punch_in,
+        "punch_out": punch_out
+        }
+      }
 
     # Insert document into DB
     try: # Exception handling
-      insertResult = db[args.collection].insert(employee) # Insert record into timesheets collection
+      insertResult = db[args.collection].update_one(employee, {'$push':{'timesheet': timesheet} }, upsert = True) # Insert record into timesheets collection
     except WriteError:
       logging.debug( "Bad input record in line: " + line + '\n')
       continue
