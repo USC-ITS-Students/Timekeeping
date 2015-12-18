@@ -2,7 +2,7 @@ db:
   build: data/.
   ports:
    - "27017:27017"
-  command: python -d Timesheet -c users -f data.txt
+  command: python MongoDBImport.py -d Timesheet -c users -f data.txt
 web:
   build: .
   ports:
