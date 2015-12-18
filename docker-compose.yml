@@ -1,0 +1,7 @@
+db:
+  image: mongo
+web:
+  build: .
+  # Docker file for Node.js handles redirection and source folder definition
+  links:
+   - db
