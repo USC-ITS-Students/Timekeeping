@@ -7,6 +7,6 @@ web:
   links:
    - db
   command:
-   - node bin/www
+   - node /src/bin/www
 db:
   image: mongo
