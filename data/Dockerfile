@@ -7,6 +7,7 @@ RUN apt-get install -y python
 # create /import folder to dump files
 MKDIR /import
 COPY MongoDBImport.py /import/MongoDBImport.py
+COPY data.txt /import/data.txt
 
 # Go to /import
 WORKDIR /import

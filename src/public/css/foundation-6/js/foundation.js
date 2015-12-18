@@ -5461,7 +5461,7 @@ Foundation.plugin(ResponsiveToggle, 'ResponsiveToggle');
   };
 
   /**
-   * Adds extra event handlers for the body and window if necessary.
+   * Adds data event handlers for the body and window if necessary.
    * @private
    */
   Reveal.prototype._extraHandlers = function(){
@@ -5553,7 +5553,7 @@ Foundation.plugin(ResponsiveToggle, 'ResponsiveToggle');
         }
       });
     }
-    //conditionals to remove extra event listeners added on open
+    //conditionals to remove data event listeners added on open
     if(this.options.closeOnEsc){
       $(window).off('keydown.zf.reveal');
     }
