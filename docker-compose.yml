@@ -1,3 +1,5 @@
+db:
+  image: mongo
 web:
   build: .
   ports:
@@ -6,5 +8,3 @@ web:
    - .:/src
   links:
    - db
-db:
-  image: mongo
