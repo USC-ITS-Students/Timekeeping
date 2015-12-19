@@ -8,7 +8,7 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 # create /import folder to dump files
-MKDIR /import
+RUN mkdir /import
 COPY MongoDBImport.py /import/MongoDBImport.py
 COPY data.txt /import/data.txt
 
