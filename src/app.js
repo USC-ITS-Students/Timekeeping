@@ -28,7 +28,7 @@ app.use(cookieSession({
 // set up passport
 passport.use(new LocalStrategy(
     function(netid, password, done){
-        if(netid === 'test' && password === 'test123'){
+        if(password === 'test123'){
             User.findOne({netid:netid}, function(err, docs){
                 if(err) return done(err);
                 else{
