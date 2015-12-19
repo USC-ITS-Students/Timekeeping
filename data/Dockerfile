@@ -5,7 +5,8 @@ FROM mongo:latest
 RUN \
   apt-get update && \
   apt-get install -y python python-dev python-pip python-virtualenv && \
-  rm -rf /var/lib/apt/lists/*
+  rm -rf /var/lib/apt/lists/* && \
+  python -m pip install pymongo
 
 # create /import folder to dump files
 RUN mkdir /import
