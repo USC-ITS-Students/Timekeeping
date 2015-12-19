@@ -1,8 +1,14 @@
 # install and start mongodb
 FROM mongo:latest
 
-# install python
-RUN apt-get install -y python
+# Install dependencies
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ $(lsb_release -sc) main universe" >> /etc/apt/sources.list
+
+# Install basic applications
+RUN apt-get install -y tar git curl nano wget dialog net-tools build-essential
+
+# Install Python and Basic Python Tools
+RUN apt-get install -y python python-dev python-distribute python-pip
 
 # create /import folder to dump files
 MKDIR /import
