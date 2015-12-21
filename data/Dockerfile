@@ -1,7 +1,7 @@
 # install and start mongodb
 #FROM mongo:latest
 
-FROM dockerfile/ubuntu
+FROM ubuntu
 
 # Install Python.
 RUN \
