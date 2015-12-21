@@ -50,7 +50,7 @@ def main():
   ts_start_rule = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}:[0-9]{2}')
   ts_end_rule = re.compile(r'(?<=[0-9-]\s)[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}:59')
   position_rule = re.compile(r'(?<=:[0-9]{2}\t)[a-z\s:,.+_-]+(?=\s:)',re.IGNORECASE)
-  org_rule = re.compile(r'(?<=:[0-9]{2}\t)[a-z\s:,.+_-]+(?=\t[a-z]+\t[0-9]{4})',re.IGNORECASE)
+  org_rule = re.compile(r'(?<=[A-Z\s\t]:\s)[a-z\s:,.+_-]+(?=\t[a-z]+\t[0-9]{4})',re.IGNORECASE)
   netid_rule = re.compile(r'(?<=[a-zA-Z0-9:-_]\s)[a-z]+(?=\s[0-9\-](.*?)\s[0-9]+\.[0-9]+)')
   punch_in_rule = re.compile(r'[0-9-]+\s[0-9:-]+(?=\s[0-9-]+\s[0-9:-]+\s[0-9]+\.[0-9]+)')
   punch_out_rule = re.compile(r'[0-9-]+\s[0-9:-]+(?=\s[0-9]+\.[0-9]+)')
