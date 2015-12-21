@@ -3,7 +3,11 @@ db:
   image: mongo
   ports:
    - "27017:27017"
-  #command: python MongoDBImport.py -d Timesheet -c users -f data.txt
+dbimport:
+  build: data/.
+  links:
+   - db
+  command: python MongoDBImport.py -s db -d Timesheet -c users -f data.txt
 web:
   build: .
   ports:
