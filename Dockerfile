@@ -12,4 +12,4 @@ WORKDIR /src
 RUN npm install -production
 
 EXPOSE  3000
-CMD ["npm", "production"]
+CMD ["node", "bin/www production"]
