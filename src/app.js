@@ -10,7 +10,12 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var cookieSession = require('cookie-session');
 
-mongoose.connect('localhost:27017/Timesheet');
+var dbhost = 'localhost';
+if(process.argv[2] === 'production'){
+    dbhost = 'db';
+}
+
+mongoose.connect(dbhost + ':27017/Timesheet');
 var User = require('./models/user');
 
 // Don't serve front-end in production, that will be handled by nginx
