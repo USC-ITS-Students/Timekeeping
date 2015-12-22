@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./src/bin/www",
-    "test": "node_modules/karma/bin/karma start karma.conf.js",
-    "production": "node ./src/bin/www production"
+    "test": "node_modules/karma/bin/karma start karma.conf.js"
   },
   "dependencies": {
     "body-parser": "^1.13.3",
