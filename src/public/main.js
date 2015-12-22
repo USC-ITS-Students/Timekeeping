@@ -43,7 +43,6 @@ app.config(function($routeProvider){
                 loggedin: checkloggedin
             }
         })
-
         // Default
         .otherwise({
             redirect: '/'
