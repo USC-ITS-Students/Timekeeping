@@ -24,27 +24,42 @@ var checkloggedin = function($q, $http, $location, $rootScope){
 //configure routes
 app.config(function($routeProvider){
     $routeProvider
-        // route for the home page
+        // route for the login page
         .when('/', {
             templateUrl: 'modules/history_report/timesheet_history.html',
-            controller: 'historyController',
+            controller: 'overviewController',
+            resolve: {
+                loggedin: checkloggedin
+            }
+        })
+        .when('/period_detail', {
+            templateUrl: 'modules/history_report/timesheet_history_detail.html',
+            controller: 'detailController',
             resolve: {
                 loggedin: checkloggedin
             }
         })
         .when('/login', {
-            templateUrl : 'modules/home/home.html',
-            controller : 'homeController'
-        })
-        .when('/period_detail', {
-            templateUrl: 'modules/history_report/timesheet_history_detail.html',
-            controller: 'historyController',
-            resolve: {
-                loggedin: checkloggedin
-            }
+            templateUrl : 'modules/login/login.html',
+            controller : 'loginController'
         })
         // Default
         .otherwise({
             redirect: '/'
         });
 });
+
+// Service that checks if data has already been loaded, else load the data
+app.service('DataLoader', ['$http', '$rootScope', function($http, $rootScope){
+    this.loadIfNeeded = function (){
+        if(!$rootScope.employee) {
+            $http.get('/api/timesheets')
+                .success(function (data) {
+                    $rootScope.employee = data;
+                })
+                .error(function (data) {
+                    console.log('Error: ' + data);
+                });
+        }
+    }
+}]);

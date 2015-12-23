@@ -1,4 +1,4 @@
-angular.module('app').controller('homeController', ['$scope', '$location', '$http', function ($scope, $location, $http) {
+angular.module('app').controller('loginController', ['$scope', '$location', '$http', '$rootScope', function ($scope, $location, $http, $rootScope) {
     $scope.netid = '';
     $scope.password = '';
     $scope.error_message = '';
