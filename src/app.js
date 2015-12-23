@@ -16,7 +16,7 @@ if(process.argv[2] === 'production'){
 }
 
 mongoose.connect(dbhost + ':27017/Timesheet');
-var User = require('./models/user');
+var User =  require('./models/user');
 
 // Don't serve front-end in production, when nginx is installed
 //if(process.argv[2] !== 'production'){
@@ -37,23 +37,19 @@ app.use(cookieSession({
 // set up passport
 passport.use(new LocalStrategy(
     function(netid, password, done){
-        if(password === 'test123'){
-            User.findOne({netid:netid}, function(err, docs){
-                if(err) return done(err);
-                else{
-                    return done(null, docs);
-                }
-            });
-        } else{
-            return done(null, false);
-        }
+        User.login(netid, password, function(err, docs){
+            if(err) return done(err);
+            else{
+                return done(null, docs)
+            }
+        });
     }
 ));
 passport.serializeUser(function(user, done){
     done(null, user.netid);
 });
-passport.deserializeUser(function(id, done){
-    User.findOne({netid:id}, function(err, docs){
+passport.deserializeUser(function(netid, done){
+    User.getByNetid(netid, function(err, docs){
         if(err) done(err);
         else{
             done(null, docs);
