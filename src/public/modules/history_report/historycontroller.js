@@ -7,7 +7,7 @@
     $http.get('/api/timesheets')
         .success(function (data) {
             $scope.employee = data;
-            //console.log(data);
+            $scope.selected_org = 0
         })
         .error(function (data) {
             console.log('Error: ' + data);
@@ -21,6 +21,4 @@
     $scope.getAllTimesheets = function() {
         $location.path('/');
     };
-
-    console.log($scope.employee);
 }]);

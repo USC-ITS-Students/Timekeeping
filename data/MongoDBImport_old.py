@@ -57,11 +57,8 @@ def main():
   punch_out_rule = re.compile(r'[0-9-]+\s[0-9:-]+(?=\s[0-9]+\.[0-9]+)')
   hours_rule = re.compile(r'[0-9]+\.[0-9]+')
 
-  # Holds the # of inserted entries
-  insertCnt = db[args.collection].count()
+  mv
 
-  employees = []
-  index = 0
   next(file) # skip the header line
   for line in file:
     # grab the employee data
@@ -82,68 +79,23 @@ def main():
       "empid": empid,
       "firstname": first,
       "lastname": last
-    }
+      }
     
-    org = {
-      "orgname": organization,
-      "position": position
-    }
-
     timesheet = {
       "start": ts_start,
       "end": ts_end,
       "total_hours": hours,
-    }
+      "timesheet_item": {
+        "organization": organization,
+        "position": position,
+        "punch_in": punch_in,
+        "punch_out": punch_out
+        }
+      }
 
-    timesheet_item = {
-      "punch_in": punch_in,
-      "punch_out": punch_out
-    }
-
-    if len(employees) == 0:
-      # if we are on the first employee, just insert
-      org['timesheet_items'] = [timesheet_item]
-      timesheet['orgs'] = [org]
-      employee['timesheets'] = [timesheet]
-      employees.append(employee)
-    else:
-      # check if we are still on the same employee:
-      if netid == employees[index]['netid']:
-        # check if timesheet already exists:
-        tsfound = False
-        for tsidx, ts in enumerate(employees[index]['timesheets']):
-          if ts['end'] == ts_end:
-            tsfound = True
-            # check if organization already exists:
-            orgfound = False
-            for orgidx, org in enumerate(ts['orgs']):
-              if org['orgname'] == organization:
-                orgfound = True
-                # append the timesheet_item
-                employees[index]['timesheets'][tsidx]['orgs'][orgidx]['timesheet_items'].append(timesheet_item)
-                break
-            if not orgfound:
-              # if the timesheet was not found append it to the org
-              org['timesheet_items'] = [timesheet_item]
-              employees[index]['timesheets'][tsidx]['orgs'].append(org)
-        if not tsfound:
-          # if the organization was not found, append it to the employee
-          org['timesheet_items'] = [timesheet_item]
-          timesheet['orgs'] = [org]
-          employees[index]['timesheets'].append(timesheet)
-      else:
-        # if we are on a new employee, eppend the new employee and increase the index
-        org['timesheet_items'] = [timesheet_item]
-        timesheet['orgs'] = [org]
-        employee['timesheets'] = [timesheet]
-        employees.append(employee)
-        index += 1
-
-  # Holds the # of inserted entries
-  insertCnt = db[args.collection].count()
-  for employee in employees:
+    # Insert document into DB
     try: # Exception handling
-      db['users'].insert(employee) # Insert record into timesheets collection
+      insertResult = db[args.collection].update_one(employee, {'$push':{'timesheet': timesheet} }, upsert = True) # Insert record into timesheets collection
     except WriteError:
       logging.debug( "Bad input record in line: " + line + '\n')
       continue
@@ -151,7 +103,7 @@ def main():
   # Number of inserted items
   insertCnt = db[args.collection].count() - insertCnt
   logging.info( '%s:%s' % (insertCnt, " new entries.") )
-
+  
   # Close file
   file.close()
 
