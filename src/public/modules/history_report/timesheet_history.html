@@ -23,8 +23,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="timesheet in employee.timesheets">
-                <td id="period-dates" ng-click="getPeriodDetail($index+1)"><a>{{timesheet.end}}</a></td>
+            <tr ng-repeat="timesheet in employee.timesheets | orderBy:'-end'">
+                <td id="period-dates" ng-click="getPeriodDetail($index+1)"><a>{{timesheet.end | date:'yyyy-MM-dd' : 'UTC' }}</a></td>
                 <td>0.0</td>
                 <td>0.0</td>
                 <td>0.0</td>
