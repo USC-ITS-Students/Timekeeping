@@ -1,4 +1,4 @@
-angular.module('app').controller('loginController', ['$scope', '$location', '$http', '$rootScope', function ($scope, $location, $http, $rootScope) {
+angular.module('app').controller('loginController', ['$scope', '$location', '$http', '$rootScope', function ($scope, $location, $http) {
     $scope.netid = '';
     $scope.password = '';
     $scope.error_message = '';
@@ -19,8 +19,6 @@ angular.module('app').controller('loginController', ['$scope', '$location', '$ht
                         $scope.login_error = true;
                     }
                 );
-            //$location.path('/history');
-            //$scope.login_error = false;
         }
         else {
             $scope.error_message = 'Enter a netid/password.';
