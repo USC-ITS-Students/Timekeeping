@@ -13,7 +13,7 @@
                     <td class="font-bold">Employee ID Number</td>
                     <td>{{employee.empid}}</td>
                     <td class="font-bold">Period Ending Date</td>
-                    <td>00/00/00</td>
+                    <td>{{timesheet.end | date:'yyyy-MM-dd' : 'UTC' }}</td>
                 </tr>
                 <tr>
                     <td class="font-bold">Supervisory Organization</td>
@@ -50,7 +50,7 @@
         </thead>
         <tbody>
            <tr>
-               <td>Program Assistant</td>
+               <td>{{timesheet.orgs[orgidx].position}}</td>
                <td>Regular</td>
                <td ng-repeat="day in [1,2,3,4,5,6,7]">
                    <input disabled type="text"  />
@@ -60,7 +60,7 @@
                <td>Approved</td>
            </tr>
             <tr>
-                <td>Program Assistant</td>
+                <td>{{timesheet.orgs[orgidx].position}}</td>
                 <td>Regular</td>
                 <td ng-repeat="day in [1,2,3,4,5,6,7]">
                     <input disabled type="text" />
@@ -104,7 +104,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>Program Assistant</td>
+                <td>{{timesheet.orgs[orgidx].position}}</td>
                 <td>Regular</td>
                 <td ng-repeat="day in [1,2,3,4,5,6,7]">
                     <input disabled type="text" />
@@ -114,7 +114,7 @@
                 <td>Approved</td>
             </tr>
             <tr>
-                <td>Program Assistant</td>
+                <td>{{timesheet.orgs[orgidx].position}}</td>
                 <td>Regular</td>
                 <td ng-repeat="day in [1,2,3,4,5,6,7]">
                     <input disabled type="text" />
