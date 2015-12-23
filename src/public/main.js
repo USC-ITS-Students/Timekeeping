@@ -32,7 +32,7 @@ app.config(function($routeProvider){
                 loggedin: checkloggedin
             }
         })
-        .when('/period_detail', {
+        .when('/period_detail/:timesheet', {
             templateUrl: 'modules/history_report/timesheet_history_detail.html',
             controller: 'detailController',
             resolve: {
@@ -51,15 +51,19 @@ app.config(function($routeProvider){
 
 // Service that checks if data has already been loaded, else load the data
 app.service('DataLoader', ['$http', '$rootScope', function($http, $rootScope){
-    this.loadIfNeeded = function (){
+    this.loadIfNeeded = function (cb){
         if(!$rootScope.employee) {
             $http.get('/api/timesheets')
                 .success(function (data) {
                     $rootScope.employee = data;
+                    if(typeof cb == 'function') cb(null);
                 })
-                .error(function (data) {
-                    console.log('Error: ' + data);
+                .error(function (err) {
+                    if(typeof cb == 'function') cb(err);
                 });
+        }
+        else{
+            if(typeof cb == 'function') cb(null);
         }
     }
 }]);

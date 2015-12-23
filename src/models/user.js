@@ -29,7 +29,7 @@ UserSchema.statics.login = function(netid, password, cb){
                 if(typeof cb === 'function'){
                     if(err) cb(err);
                     else{
-                        return cb(null, docs);
+                        cb(null, docs);
                     }
                 }
             });
@@ -41,7 +41,7 @@ UserSchema.statics.getByNetid = function(netid, cb){
         if(typeof cb === 'function'){
             if(err) cb(err);
             else{
-                return cb(null, docs);
+                 cb(null, docs);
             }
         }
     });
