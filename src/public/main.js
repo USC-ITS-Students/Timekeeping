@@ -53,6 +53,7 @@ app.config(function($routeProvider){
 app.service('DataLoader', ['$http', '$rootScope', function($http, $rootScope){
     this.loadIfNeeded = function (cb){
         if(!$rootScope.employee) {
+            console.log('performing network call');
             $http.get('/api/timesheets')
                 .success(function (data) {
                     $rootScope.employee = data;
