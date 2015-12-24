@@ -43,7 +43,7 @@
             <tr>
                 <th class="width-15p">Position</th>
                 <th class="width-10p">Time Type</th>
-                <th class="text-center" ng-repeat="i in ['Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed']">{{i}}<br />00/00</th>
+                <th class="text-center" ng-repeat="Day in Dates">{{Day.Day}}<br />{{Day.Date}}</th>
                 <th class="width-10p">Approver</th>
                 <th class="width-10p">Status</th>
             </tr>

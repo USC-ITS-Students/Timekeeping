@@ -12,4 +12,6 @@ angular.module('app').controller('detailController', ['$scope', '$location', '$r
     $scope.goToOverview = function() {
         $location.path('/');
     };
+
+    $scope.Dates = [{Day: 'Thu', Date:"01/02"}, {Day: 'Fri', Date:"01/05"}, {Day: 'Sat', Date:"06/02"}, {Day: 'Sun', Date:"07/02"}, {Day: 'Mon', Date:"06/01"}, {Day: 'Tue', Date:"01/02"}, {Day: 'Wed', Date:"01/02"}];
 }]);
