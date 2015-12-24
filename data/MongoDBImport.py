@@ -68,14 +68,14 @@ def main():
     empid = empid_rule.match(line).group(0)
     first = first_rule.search(line).group(0)
     last = last_rule.search(line).group(0)
-    ts_start = ts_start_rule.search(line).group(0)
-    ts_end = ts_end_rule.search(line).group(0)
+    ts_start = datetime.strptime(ts_start_rule.search(line).group(0), '%Y-%m-%d %H:%M:%S')
+    ts_end = datetime.strptime(ts_end_rule.search(line).group(0), '%Y-%m-%d %H:%M:%S')
     position = position_rule.search(line).group(0)
     organization = org_rule.search(line).group(0)
     netid = netid_rule.search(line).group(0)
-    punch_in = punch_in_rule.search(line).group(0)
-    punch_out = punch_out_rule.search(line).group(0)
-    hours = hours_rule.search(line).group(0)
+    punch_in = datetime.strptime(punch_in_rule.search(line).group(0), '%Y-%m-%d %H:%M:%S')
+    punch_out = datetime.strptime(punch_out_rule.search(line).group(0), '%Y-%m-%d %H:%M:%S')
+    hours = float(hours_rule.search(line).group(0))
 
     employee = {
       "netid": netid,

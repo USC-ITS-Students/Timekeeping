@@ -36,8 +36,8 @@ UserSchema.statics.login = function(netid, password, cb){
         }
     };
 
-UserSchema.statics.getByNetid = function(netid, cb){
-    this.findOne({netid:netid}, function(err, docs){
+UserSchema.statics.getById = function(id, cb){
+    this.findById(id, function(err, docs){
         if(typeof cb === 'function'){
             if(err) cb(err);
             else{

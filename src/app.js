@@ -46,10 +46,10 @@ passport.use(new LocalStrategy(
     }
 ));
 passport.serializeUser(function(user, done){
-    done(null, user.netid);
+    done(null, user._id);
 });
-passport.deserializeUser(function(netid, done){
-    User.getByNetid(netid, function(err, docs){
+passport.deserializeUser(function(id, done){
+    User.getById(id, function(err, docs){
         if(err) done(err);
         else{
             done(null, docs);
