@@ -5,22 +5,7 @@ var UserSchema = new mongoose.Schema({
     netid: { type: String, required: true, index: { unique: true } },
     empid: { type: String, required: true, index: { unique: true } },
     firstname: String,
-    lastname: String,
-    timesheets: [
-        {
-            start: Date,
-            end: Date,
-            total_hours: Number,
-            orgs: [{
-                orgname: String,
-                position: String,
-                timesheet_items: [{
-                    punch_in: Date,
-                    punch_out: Date
-                }]
-            }]
-        }
-    ]
+    lastname: String
 });
 
 UserSchema.statics.login = function(netid, password, cb){
@@ -46,6 +31,8 @@ UserSchema.statics.getById = function(id, cb){
         }
     });
 };
+
+
 
 // Exports ---
 module.exports = mongoose.model('User', UserSchema);

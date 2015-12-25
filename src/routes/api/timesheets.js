@@ -1,14 +1,16 @@
 var router = require('express').Router();
-var User = require('../../models/user');
-var passport = require('passport');
+var Timesheet = require('../../models/timesheet');
 
-router.get('/',
+router.get('/:year',
     function(req, res){
         // check if user is logged in
         if(req.isAuthenticated()){
-            // user is stored in the session (req.user)
-            console.log(req.user.timesheets[0].end);
-            res.json(req.user);
+            Timesheet.getByYear(req.user.netid, req.params.year, function(err, docs){
+                if(err) res.sendStatus(400);
+                else{
+                    res.json(docs);
+                }
+            });
         }else{
             res.sendStatus(401);
         }

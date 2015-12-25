@@ -61,7 +61,7 @@ def main():
   insertCnt = db[args.collection].count()
 
   employees = []
-  index = 0
+  timesheets = []
   next(file) # skip the header line
   for line in file:
     # grab the employee data
@@ -90,6 +90,7 @@ def main():
     }
 
     timesheet = {
+      "owner": netid,
       "start": ts_start,
       "end": ts_end,
       "total_hours": hours,
@@ -100,50 +101,54 @@ def main():
       "punch_out": punch_out
     }
 
+    
+    # handle employee
     if len(employees) == 0:
-      # if we are on the first employee, just insert
-      org['timesheet_items'] = [timesheet_item]
-      timesheet['orgs'] = [org]
-      employee['timesheets'] = [timesheet]
+      # just insert the employee
       employees.append(employee)
     else:
-      # check if we are still on the same employee:
-      if netid == employees[index]['netid']:
-        # check if timesheet already exists:
-        tsfound = False
-        for tsidx, ts in enumerate(employees[index]['timesheets']):
-          if ts['end'] == ts_end:
-            tsfound = True
-            # check if organization already exists:
-            orgfound = False
-            for orgidx, org in enumerate(ts['orgs']):
-              if org['orgname'] == organization:
-                orgfound = True
-                # append the timesheet_item
-                employees[index]['timesheets'][tsidx]['orgs'][orgidx]['timesheet_items'].append(timesheet_item)
-                break
-            if not orgfound:
-              # if the timesheet was not found append it to the org
-              org['timesheet_items'] = [timesheet_item]
-              employees[index]['timesheets'][tsidx]['orgs'].append(org)
-        if not tsfound:
-          # if the organization was not found, append it to the employee
+      # only insert employee if it was different than before
+      i = len(employees)-1
+      if employee['netid'] != employees[i]:
+        employees.append(employee)
+
+    # handle timesheet
+    if len(timesheets) == 0:
+      # just insert timesheet
+      org['timesheet_items'] = [timesheet_item]
+      timesheet['orgs'] = [org]
+      timesheets.append(timesheet)
+    else:
+      i = len(timesheets)-1
+      # check if timesheet exists
+      if timesheet['owner'] == timesheets[i]['owner'] and timesheet['end'] == timesheets[i]['end']:
+        # check if org already exists
+        orgfound = False
+        for orgidx, org in enumerate(timesheets[i]['orgs']):
+          if org == organization:
+            orgfound = True
+            timesheets[i]['orgs'][orgidx]['timesheet_items'].append(timesheet_item)
+        if not orgfound:
           org['timesheet_items'] = [timesheet_item]
-          timesheet['orgs'] = [org]
-          employees[index]['timesheets'].append(timesheet)
       else:
-        # if we are on a new employee, eppend the new employee and increase the index
+        # if timesheet doesn't exist just insert it
         org['timesheet_items'] = [timesheet_item]
         timesheet['orgs'] = [org]
-        employee['timesheets'] = [timesheet]
-        employees.append(employee)
-        index += 1
+        timesheets.append(timesheet)
+
 
   # Holds the # of inserted entries
   insertCnt = db[args.collection].count()
   for employee in employees:
     try: # Exception handling
       db['users'].insert(employee) # Insert record into timesheets collection
+    except WriteError:
+      logging.debug( "Bad input record in line: " + line + '\n')
+      continue
+
+  for timesheet in timesheets:
+    try: # Exception handling
+       db['timesheets'].insert(timesheet) # Insert record into timesheets collection
     except WriteError:
       logging.debug( "Bad input record in line: " + line + '\n')
       continue
