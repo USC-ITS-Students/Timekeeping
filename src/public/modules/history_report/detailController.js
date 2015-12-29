@@ -1,4 +1,6 @@
 (function(){
+    'use strict';
+
     angular.module('app').controller('detailController', ['$scope', '$location', '$routeParams', '$filter', 'DataLoader', function ($scope, $location, $routeParams, $filter, DataLoader) {
 
         DataLoader.load($routeParams.year, function(err){

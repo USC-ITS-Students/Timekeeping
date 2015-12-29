@@ -1,4 +1,6 @@
 (function(){
+    'use strict';
+
     angular.module('app').controller('loginController', ['$scope', '$location', '$http', function ($scope, $location, $http) {
         $scope.netid = '';
         $scope.password = '';
