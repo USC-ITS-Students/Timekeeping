@@ -125,11 +125,12 @@ def main():
         # check if org already exists
         orgfound = False
         for orgidx, org in enumerate(timesheets[i]['orgs']):
-          if org == organization:
+          if org['orgname'] == organization:
             orgfound = True
             timesheets[i]['orgs'][orgidx]['timesheet_items'].append(timesheet_item)
         if not orgfound:
           org['timesheet_items'] = [timesheet_item]
+          timesheets[i]['orgs'] = [org]
       else:
         # if timesheet doesn't exist just insert it
         org['timesheet_items'] = [timesheet_item]
