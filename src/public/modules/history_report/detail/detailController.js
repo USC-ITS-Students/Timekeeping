@@ -6,7 +6,15 @@
         DataLoader.load($routeParams.year, function(err){
             if(err) console.log(err);
             else{
+                var weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                 $scope.timesheet = $filter('orderBy')($scope.timesheets, '-end')[$routeParams.timesheet - 1];
+                $scope.Dates = generateWeek($scope.timesheet.start).map(function(date){
+                    return {
+                        Day: weekdays[date.getDay()],
+                        Date: ('0' + (date.getMonth()+1).toString()).slice(-2) + '/' + ('0' + (date.getDate()).toString()).slice(-2)
+                    };
+                });
+
             }
         });
 
@@ -15,6 +23,18 @@
             $location.path('/history/' + $routeParams.year);
         };
 
-        $scope.Dates = [{Day: 'Thu', Date:"01/02"}, {Day: 'Fri', Date:"01/05"}, {Day: 'Sat', Date:"06/02"}, {Day: 'Sun', Date:"07/02"}, {Day: 'Mon', Date:"06/01"}, {Day: 'Tue', Date:"01/02"}, {Day: 'Wed', Date:"01/02"}];
     }]);
+
+    function generateWeek(start){
+        var startDate = new Date(start);
+        startDate.setTime(startDate.getTime() + 1*86400000);
+        var dates = [startDate];
+        for(var i = 0; i < 13; i++){
+            var next = new Date();
+            next.setTime( dates[i].getTime() + 1*86400000);
+            dates.push(next);
+        }
+
+        return dates;
+    }
 })();
