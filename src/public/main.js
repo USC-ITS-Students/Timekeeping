@@ -35,14 +35,14 @@
                 controller :  'loginController'
             })
             .when('/details/:year/:timesheet', {
-                templateUrl: 'modules/history_report/timesheet_history_detail.html',
+                templateUrl: 'modules/history_report/detail/timesheet_history_detail.html',
                 controller:  'detailController',
                 resolve: {
                     loggedin: checkloggedin
                 }
             })
             .when('/history/:year', {
-                templateUrl: 'modules/history_report/timesheet_history.html',
+                templateUrl: 'modules/history_report/overview/timesheet_history.html',
                 controller:  'overviewController',
                 resolve: {
                     loggedin: checkloggedin
@@ -54,7 +54,7 @@
             });
     });
 
-// Service that checks if data has already been loaded, else load the data
+    // Service that checks if data has already been loaded, else load the data
     app.service('DataLoader', ['$http', '$rootScope', '$q', function($http, $rootScope, $q){
         function loadEmployee() {
             if(!$rootScope.employee){

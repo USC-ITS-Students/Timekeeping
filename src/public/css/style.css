@@ -74,6 +74,10 @@ a:hover{
     background-color: white;
 }
 
+#year_selector {
+    max-width: 100px;
+}
+
 #pay-detail-week input, #pay-detail-week2 input{
     padding-bottom: 0px;
     margin-bottom: 0px;
