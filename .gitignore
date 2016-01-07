@@ -20,5 +20,6 @@ com_crashlytics_export_strings.xml crashlytics.properties crashlytics-build.prop
 fabric.properties
 
 node_modules
-npm-debug.log
+**.log
 test_reports
+**.csv
