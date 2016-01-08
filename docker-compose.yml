@@ -7,7 +7,8 @@ dbimport:
   build: data/.
   links:
    - db
-  command: python MongoDBImport.py -s db -d Timesheet -c users -f data.txt
+  command: node DataImport.js -f header.csv -e earn_summary.csv -s sanctions.csv -t time.csv -c mongodb://db/27017/Timesheet
+
 web:
   build: .
   ports:
