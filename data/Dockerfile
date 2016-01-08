@@ -16,4 +16,10 @@ COPY ../package.json /import/package.json
 WORKDIR /import
 
 # install dependencies
-RUN npm install
+RUN npm install csv-parse
+RUN npp install fs
+RUN npp install async
+RUN npp install q
+RUN npp install mongodb
+RUN npp install assert
+RUN npp install minimist
