@@ -1,22 +1,15 @@
 # install and start mongodb
 #FROM mongo:latest
 
-FROM ubuntu
-
-# Install Python.
-RUN \
-  apt-get update && \
-  apt-get install -y python python-dev python-pip python-virtualenv && \
-  rm -rf /var/lib/apt/lists/* && \
-  python -m pip install pymongo
+FROM node
 
 # create /import folder to dump files
 RUN mkdir /import
-COPY MongoDBImport.py /import/MongoDBImport.py
-COPY data.txt /import/data.txt
+COPY DataImport.js /import/DataImport.js
+COPY earn_summary.csv /import/earn_summary.csv
+COPY header.csv /import/header.csv
+COPY sanctions.csv /import/sanctions.csv
+COPY time.csv /import/time.csv
 
 # Go to /import
 WORKDIR /import
-
-# Run the script
-# CMD ["python", "MongoDBImport.py"]
