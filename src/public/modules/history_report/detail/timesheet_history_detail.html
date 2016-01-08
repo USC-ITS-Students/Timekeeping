@@ -7,7 +7,7 @@
                     <td class="font-bold">Employee Name</td>
                     <td class="width-35p">{{employee.firstname}} {{employee.lastname}}</td>
                     <td class="font-bold">Time Sheet Status</td>
-                    <td>Approved</td>
+                    <td>{{timesheet.status}}</td>
                 </tr>
                 <tr>
                     <td class="font-bold">Employee ID Number</td>
@@ -17,24 +17,25 @@
                 </tr>
                 <tr>
                     <td class="font-bold">Supervisory Organization</td>
-                    <td>{{timesheet.orgs[orgidx].orgname}}</td>
+                    <td>{{timesheet.organization}}</td>
                     <td class="font-bold">Meal Waiver 1</td>
-                    <td>No</td>
+                    <td>{{timesheet.mealwaive1 === 'N' ? 'No' : 'Yes'}}</td>
                 </tr>
                 <tr>
                     <td class="font-bold">Supervisor Name</td>
-                    <td>Don Corley</td>
+                    <td><span ng-repeat="supervisor in timesheet.supervisors"> {{supervisor}}{{$index < timesheet.supervisors.length-1 ? ', ':''}}</span></td>
                     <td class="font-bold">Meal Waiver 2</td>
-                    <td>No</td>
+                    <td>{{timesheet.mealwaive2 === 'N' ? 'No' : 'Yes'}}</td>
                 </tr>
+                <tr><td class="font-bold">Region</td><td>{{timesheet.region}}</td></tr>
             </table>
         </div>
         <div class="large-2 small-2 columns">
             <table class="right-align border-none" id="balance-table">
                 <tr><td colspan="2" class="bottom-border font-bold">Balance</td></tr>
-                <tr><td class="font-bold">Sick</td><td>2.0</td></tr>
-                <tr><td class="font-bold">Vacation</td><td>2.0</td></tr>
-                <tr><td class="font-bold">Winter Recess</td><td>2.0</td></tr>
+                <tr><td class="font-bold">Sick</td><td>{{timesheet.sickbalance ? timesheet.sickbalance : 0 | number:2}}</td></tr>
+                <tr><td class="font-bold">Vacation</td><td>{{timesheet.vacbalance ? timesheet.vacbalance : 0 | number: 2}}</td></tr>
+                <tr><td class="font-bold">Winter</td><td>{{timesheet.winterbalance ? timesheet.winterbalance : 0 | number:2}}</td></tr>
             </table>
         </div>
     </div>
@@ -49,46 +50,73 @@
             </tr>
         </thead>
         <tbody>
-           <tr>
-               <td>{{timesheet.orgs[orgidx].position}}</td>
-               <td>Regular</td>
-               <td ng-repeat="day in [1,2,3,4,5,6,7]">
-                   <input disabled type="text"  />
-                   <input disabled type="text" />
-               </td>
-               <td>Don Corley</td>
-               <td>Approved</td>
-           </tr>
-            <tr>
-                <td>{{timesheet.orgs[orgidx].position}}</td>
-                <td>Regular</td>
-                <td ng-repeat="day in [1,2,3,4,5,6,7]">
-                    <input disabled type="text" />
-                    <input disabled type="text" />
+            <!-- row for each position -->
+            <tr ng-repeat="row in week1HoursTable" rowspan="{{row.rowspan}}">
+                <!-- name of position -->
+                <td rowspan="{{row.rowspan}}">{{row.position}}</td>
+                <!-- name of position -->
+
+                <!-- row for each earn code -->
+                <td colspan="8">
+                    <table>
+                        <tr colspan="" ng-repeat="(code, data) in row.earnCodes">
+                            <!-- earn code type-->
+                            <td colspan="1">{{code}}</td>
+                            <!-- earn code type-->
+
+                            <!-- row for each necessary row of hours -->
+                            <td colspan="7">
+                                <table>
+                                    <tr ng-repeat="i in generateRange(data.rowspan)">
+                                        <td colspan="1" ng-repeat="day in generateRange(7)">
+                                            <div ng-show="data.days[day][i].hours1 && data.days[day][i].hours2">
+                                                <input disabled type="text" value="{{data.days[day][i].hours1}}" />
+                                                <input disabled type="text" value="{{data.days[day][i].hours2}}" />
+                                            </div>
+
+                                            <div ng-show="data.days[day][i].hours1 && !data.days[day][i].hours2">
+                                                <input style="height: 50px" class="text-center" disabled type="text" value="{{data.days[day][i].hours1}}" />
+                                            </div>
+
+                                            <div ng-show="!data.days[day][i].hours1 && !data.days[day][i].hours2">
+                                                <input disabled type="text" value="" />
+                                                <input disabled type="text" value="" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <!-- row for each necessary row of hours -->
+                        </tr>
+                    </table>
                 </td>
-                <td>Don Corley</td>
-                <td>Approved</td>
+                <!-- row for each earn code -->
+
+                <!-- Approver and status -->
+                <td rowspan="{{row.rowspan}}">{{row.approver}}</td>
+                <td rowspan="{{row.rowspan}}">{{row.status}}</td>
+                <!-- Approver and status -->
             </tr>
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="2" class="width-25p font-normal">I was <u>not</u> provided the appropriate rest periods to which I am entitled under USC's policy for the following days</td>
-                <td ng-repeat="day in [1,2,3,4,5,6,7]" class="text-center"><input disabled type="checkbox" /></td>
+                <td ng-repeat="sanction in timesheet.week[0].aRestSanctions track by $index" class="text-center"><input ng-checked="sanction === 'Y'" disabled type="checkbox"/></td>
                 <td class="width-10p"></td>
                 <td class="width-10p"></td>
             </tr>
             <tr>
                 <td colspan="2" class="width-25p font-normal">I was <u>not</u> provided the appropriate meal periods to which I am entitled under USC's policy for the following days</td>
-                <td ng-repeat="day in [1,2,3,4,5,6,7]" class="text-center"><input disabled type="checkbox" /></td>
+                <td ng-repeat="sanction in timesheet.week[0].bMealsSanctions track by $index" class="text-center"><input ng-checked="sanction === 'Y'" disabled type="checkbox"/></td>
                 <td class="width-10p"></td>
                 <td class="width-10p"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Total Hours:</td>
-                <td ng-repeat="day in [1,2,3,4,5,6,7]" class="text-center">0.00</td>
+                <td ng-repeat="hours in timesheet.week[0].grandTotal.hours track by $index" class="text-center">{{hours | number:1}}</td>
                 <td class="width-10p"></td>
-                <td class="width-10p"></td>
+                <td class="width-10p">Total: {{timesheet.week[0].grandTotal.total | number:1}}</td>
             </tr>
         </tfoot>
     </table>
@@ -103,47 +131,77 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>{{timesheet.orgs[orgidx].position}}</td>
-                <td>Regular</td>
-                <td ng-repeat="day in [1,2,3,4,5,6,7]">
-                    <input disabled type="text" />
-                    <input disabled type="text" />
-                </td>
-                <td>Don Corley</td>
-                <td>Approved</td>
-            </tr>
-            <tr>
-                <td>{{timesheet.orgs[orgidx].position}}</td>
-                <td>Regular</td>
-                <td ng-repeat="day in [1,2,3,4,5,6,7]">
-                    <input disabled type="text" />
-                    <input disabled type="text" />
-                </td>
-                <td>Don Corley</td>
-                <td>Approved</td>
-            </tr>
+        <!-- row for each position -->
+        <tr ng-repeat="row in week2HoursTable" rowspan="{{row.rowspan}}">
+            <!-- name of position -->
+            <td rowspan="{{row.rowspan}}">{{row.position}}</td>
+            <!-- name of position -->
+
+            <!-- row for each earn code -->
+            <td colspan="8">
+                <table>
+                    <tr colspan="" ng-repeat="(code, data) in row.earnCodes">
+                        <!-- earn code type-->
+                        <td colspan="1">{{code}}</td>
+                        <!-- earn code type-->
+
+                        <!-- row for each necessary row of hours -->
+                        <td colspan="7">
+                            <table>
+                                <tr ng-repeat="i in generateRange(data.rowspan)">
+                                    <td colspan="1" ng-repeat="day in generateRange(7)">
+
+                                        <div ng-show="data.days[day][i].hours1 && data.days[day][i].hours2">
+                                            <input disabled type="text" value="{{data.days[day][i].hours1}}" />
+                                            <input disabled type="text" value="{{data.days[day][i].hours2}}" />
+                                        </div>
+
+                                        <div ng-show="data.days[day][i].hours1 && !data.days[day][i].hours2">
+                                            <input style="height: 50px" class="text-center" disabled type="text" value="{{data.days[day][i].hours1}}" />
+                                        </div>
+
+                                        <div ng-show="!data.days[day][i].hours1 && !data.days[day][i].hours2">
+                                            <input disabled type="text" value="" />
+                                            <input disabled type="text" value="" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <!-- row for each necessary row of hours -->
+                    </tr>
+                </table>
+            </td>
+            <!-- row for each earn code -->
+
+            <!-- Approver and status -->
+            <td rowspan="{{row.rowspan}}">{{row.approver}}</td>
+            <td rowspan="{{row.rowspan}}">{{row.status}}</td>
+            <!-- Approver and status -->
+        </tr>
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="2" class="width-25p font-normal">I was <u>not</u> provided the appropriate rest periods to which I am entitled under USC's policy for the following days</td>
-                <td ng-repeat="day in [1,2,3,4,5,6,7]" class="text-center"><input disabled type="checkbox" /></td>
+                <td ng-repeat="sanction in timesheet.week[1].aRestSanctions track by $index" class="text-center"><input ng-checked="sanction === 'Y'" disabled type="checkbox"/></td>
                 <td class="width-10p"></td>
                 <td class="width-10p"></td>
             </tr>
             <tr>
                 <td colspan="2" class="width-25p font-normal">I was <u>not</u> provided the appropriate meal periods to which I am entitled under USC's policy for the following days</td>
-                <td ng-repeat="day in [1,2,3,4,5,6,7]" class="text-center"><input disabled type="checkbox" /></td>
+                <td ng-repeat="sanction in timesheet.week[1].bMealsSanctions track by $index" class="text-center"><input ng-checked="sanction === 'Y'" disabled type="checkbox"/></td>
                 <td class="width-10p"></td>
                 <td class="width-10p"></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Total Hours:</td>
-                <td ng-repeat="day in [1,2,3,4,5,6,7]" class="text-center">0.00</td>
+                <td ng-repeat="hours in timesheet.week[1].grandTotal.hours track by $index" class="text-center">{{hours | number:1}}</td>
                 <td class="width-10p"></td>
-                <td class="width-10p"></td>
+                <td class="width-10p">Total: {{timesheet.week[1].grandTotal.total | number:1}}</td>
             </tr>
         </tfoot>
     </table>
 </div>
+
+<hours-row></hours-row>

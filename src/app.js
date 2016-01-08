@@ -36,8 +36,8 @@ app.use(cookieSession({
 
 // set up passport
 passport.use(new LocalStrategy(
-    function(netid, password, done){
-        User.login(netid, password, function(err, docs){
+    function(empid, password, done){
+        User.login(empid, password, function(err, docs){
             if(err) return done(err);
             else{
                 return done(null, docs)

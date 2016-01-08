@@ -5,7 +5,7 @@ router.get('/:year',
     function(req, res){
         // check if user is logged in
         if(req.isAuthenticated()){
-            Timesheet.getByYear(req.user.netid, req.params.year, function(err, docs){
+            Timesheet.getByYear(req.user.empid, req.params.year, function(err, docs){
                 if(err) res.sendStatus(400);
                 else{
                     res.json(docs);

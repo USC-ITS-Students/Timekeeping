@@ -2,28 +2,36 @@
     'use strict';
 
     angular.module('app').controller('loginController', ['$scope', '$location', '$http', function ($scope, $location, $http) {
-        $scope.netid = '';
+        // check if the user is already logged in
+        $http.get('/auth/checkloggedin').then(
+            function(){
+                // if user is already loggedin, redirect
+                $location.url('/history');
+            }
+        );
+
+        $scope.empid = '';
         $scope.password = '';
         $scope.error_message = '';
 
         $scope.submit = function () {
-            if ($scope.netid && $scope.password) {
-                $http.post('/auth/login', {username:$scope.netid, password:$scope.password})
+            if ($scope.empid && $scope.password) {
+                $http.post('/auth/login', {username:$scope.empid, password:$scope.password})
                     .then(
-                        function(){
+                        function(res){
                             // login successful callback
                             $scope.login_error = true;
-                            $location.url('/2015');
+                            $location.url('/history/'+res.data.lastYearWorked.toString());
                         },
                         function(){
                             // login failure callback
-                            $scope.error_message = 'Invalid netid/password';
+                            $scope.error_message = 'Invalid Employee ID/Password';
                             $scope.login_error = true;
                         }
                     );
             }
             else {
-                $scope.error_message = 'Enter a netid/password.';
+                $scope.error_message = 'Missing Employee ID/Password.';
                 $scope.login_error = true;
             }
         }

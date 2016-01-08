@@ -2,17 +2,25 @@
 var mongoose = require('mongoose');
 
 var TimesheetSchema = new mongoose.Schema({
-    start: Date,
+    owner: String,
     end: Date,
-    total_hours: Number,
-    orgs: [{
-        orgname: String,
-        position: String,
-        timesheet_items: [{
-            punch_in: Date,
-            punch_out: Date
-        }]
-    }]
+    payfreq: String,
+    supervisors: [String],
+    empstatus: String,
+    mealwaive1: String,
+    mealwaive2: String,
+    status: String,
+    empstart: String,
+    sickrate: String,
+    sickbalance: Number,
+    vacrate: Number,
+    vacbalance: Number,
+    winterrate: Number,
+    winterbalance: Number,
+    region: String,
+    organization: String,
+    hourTypeTotals: {},
+    week: []
 });
 
 TimesheetSchema.statics.getByOwner = function(owner, cb){

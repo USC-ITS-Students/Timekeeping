@@ -25,17 +25,20 @@ var parser = require('csv-parse'),
             "-c: Mongodb connection string;   'mongodb://localhost:27017/Timesheet' by default\n" +
             "-h or --help: This menu.";
 
+// Check if help flag was entered
 if(argv.h || argv.help){
     console.log(HelpMenu);
     return;
 }
 
+// get commandline data
 var headerFile = argv.f,
     earnSummaryFile = argv.e,
     sanctionsFile = argv.s,
     timeFile = argv.t,
     connectionString = argv.c;
 
+// check if all required arguments have been given
 if(headerFile && earnSummaryFile && sanctionsFile && timeFile){
     // Start program
     main();
@@ -47,8 +50,8 @@ if(headerFile && earnSummaryFile && sanctionsFile && timeFile){
 // ************ //
 // *** MAIN *** //
 // ************ //
+// parse data, merge and write to database
 function main(){
-    // parse data, merge and write to database
     parse()
         .then(function(data){
             // sort timesheets by docid so that we can do binary searches to find index when merging
@@ -87,6 +90,7 @@ function main(){
                 ]).then(
                     function(){
                         // if successful just close the connection
+                        console.log('Successfully written to the db.');
                         db.close();
                     },
                     function(err){
@@ -102,7 +106,6 @@ function main(){
 // **************************** //
 // *** FUNCTION DEFINITIONS *** //
 // **************************** //
-
 // MAIN PARSE FUNCTION: parses the data from csv files and turns them into js objects
 function parse() {
     return Q.all([
@@ -212,14 +215,19 @@ function processHeader(data){
                     winterrate = doc[18],
                     winterbalance = doc[19];
 
+                // calculate the start date
+                enddate = new Date(enddate);
+                var startdate = new Date();
+                startdate.setTime(enddate.getTime() - 13*86400000);
+
                 var employee = {
                     empid: empid,
                     firstname: name.slice(0, name.indexOf(',')),
-                    lastname: name.slice(name.indexOf(',')+2, name.length)
+                    lastname: name.slice(name.indexOf(',')+2, name.length),
+                    lastYearWorked: enddate.getFullYear()
                 };
 
-
-                // check if we need to push the employee
+                // check if we need to push the employee or update lastYearWorked
                 if(employees.length === 0){
                     employees.push(employee);
                 }else{
@@ -227,6 +235,7 @@ function processHeader(data){
                     for(var i = 0; i < employees.length; i++){
                         if(employees[i].empid === empid){
                             employeeFound = true;
+                            employees[i].lastYearWorked = Math.max(employees[i].lastYearWorked, employee.lastYearWorked);
                         }
                     }
                     if(!employeeFound){
@@ -237,6 +246,7 @@ function processHeader(data){
                 var timesheet = {
                     docid: docid,
                     owner: empid,
+                    start: startdate,
                     end: enddate,
                     payfreq: payfreq,
                     supervisors: supervisors.split(","),
@@ -245,14 +255,23 @@ function processHeader(data){
                     mealwaive2: mealwaive2,
                     status: docstatus,
                     empstart: empstart,
-                    sickrate: sickrate,
-                    sickbalance: sickbalance,
-                    vacrate: vacrate,
-                    vacbalance: vacbalance,
-                    winterrate: winterrate,
-                    winterbalance: winterbalance,
+                    sickrate: parseFloat(sickrate),
+                    sickbalance: parseFloat(sickbalance),
+                    vacrate: parseFloat(vacrate),
+                    vacbalance: parseFloat(vacbalance),
+                    winterrate: parseFloat(winterrate),
+                    winterbalance: parseFloat(winterbalance),
                     region: region,
                     organization: organization,
+                    hourTypeTotals: {
+                        'Regular': 0,
+                        'Overtime': 0,
+                        'Double Time': 0,
+                        'Vacation': 0,
+                        'Sick': 0,
+                        'Other Paid': 0,
+                        'Other Unpaid': 0
+                    },
                     week: [
                         {
                             positions: []
@@ -277,7 +296,10 @@ function processHeader(data){
 
 function processEarnSummary(data){
     return Q(function(resolve, reject){
-        var summaries = [];
+        var summaries = {
+            grandTotals: [],
+            hourTypeTotals: []
+        };
         async.each(
             data, // array of rows
             // function to apply on each row
@@ -285,24 +307,26 @@ function processEarnSummary(data){
                 var docid = doc[0],
                     weeknum = doc[1],
                     grandtotal = doc[3],
-                    position = doc[4],
-                    earncode = doc[5],
-                    hours = [doc[6],doc[7],doc[8],doc[9],doc[10],doc[11],doc[12]],
-                    totalhours = doc[13];
+                    timeType = doc[5],
+                    hours = [parseFloat(doc[6]),parseFloat(doc[7]),parseFloat(doc[8]),parseFloat(doc[9]),parseFloat(doc[10]),parseFloat(doc[11]),parseFloat(doc[12])],
+                    totalhours = parseFloat(doc[13]);
 
-
-                // we only care about the totals here, the position specific hours is parsed in parseTime
                 if(grandtotal === 'Y'){
                     var summary = {
                         docid: docid,
                         weeknum: weeknum-1,
                         hours: hours,
-                        totalhours : totalhours
+                        totalhours : parseFloat(totalhours)
                     };
-
-                    summaries.push(summary);
+                    summaries.grandTotals.push(summary);
+                }else{
+                    var summary = {
+                        docid: docid,
+                        type: timeType,
+                        totalhours : parseFloat(totalhours)
+                    };
+                    summaries.hourTypeTotals.push(summary);
                 }
-
                 callback();
             },
             // when done:
@@ -354,21 +378,27 @@ function processTime(data){
             function(doc, callback){
                 var docid = doc[0],
                     day = doc[1],
-                    start = doc[2],
-                    end = doc[3],
+                    hours1 = doc[2],
+                    hours2 = doc[3],
                     weeknum = doc[4],
                     position = doc[6],
-                    earncode = doc[8];
+                    earncode = doc[8],
+                    approver = doc[9],
+                    approverid = doc[10],
+                    status = doc[11];
 
 
                 var time = {
                     docid: docid,
                     weeknum: weeknum-1,
-                    start: start,
-                    end: end,
+                    hours1: hours1,
+                    hours2: hours2,
                     day: day,
                     position: position,
-                    earncode: earncode
+                    earncode: earncode,
+                    approver: approver,
+                    approverid: approverid,
+                    status: status
                 };
 
                 times.push(time);
@@ -386,17 +416,35 @@ function processTime(data){
 
 // MERGE FUNCTIONS: After parsing in the data, the data is all merged into two types of objects, timesheets and employees
 function mergeSummaries(timesheets, summaries){
+    // merge grand totals
     async.each(
-        summaries,
-        function(summary){
-            var i = getIndexOfMatch(timesheets, summary.docid);
+        summaries.grandTotals,
+        function(grandTotal){
+            var i = getIndexOfMatch(timesheets, grandTotal.docid);
             if(i !== -1){
-                timesheets[i].week[summary.weeknum].summary = {
-                    hours: summary.hours,
-                    total: summary.totalhours
+                timesheets[i].week[grandTotal.weeknum].grandTotal = {
+                    hours: grandTotal.hours,
+                    total: grandTotal.totalhours
                 };
             }else{
-                console.log('Could not find header with docid: "' + summary.docid + '"for a summary!');
+                console.log('Could not find header with docid: "' + grandTotal.docid + '"for a grand total!');
+            }
+        },
+        // when done:
+        function(err){
+            if(err) console.log(err);
+        }
+    );
+
+    // merge hour type totals
+    async.each(
+        summaries.hourTypeTotals,
+        function(hourTypeTotal){
+            var i = getIndexOfMatch(timesheets, hourTypeTotal.docid);
+            if(i !== -1){
+                timesheets[i].hourTypeTotals[hourTypeTotal.type] += hourTypeTotal.totalhours;
+            }else{
+                console.log('Could not find header with docid: "' + hourTypeTotal.docid + '"for a hour type total!');
             }
         },
         // when done:
@@ -430,31 +478,38 @@ function mergeTimes(timesheets, times){
         function(time){
             var i = getIndexOfMatch(timesheets, time.docid);
             if(i !== -1){
+                var posIdx = -1; // need to keep track of what position the time corresponds to so that we can update approve/status
                 // check if there are any positions
                 var len = timesheets[i].week[time.weeknum].positions.length;
                 if(len > 0){
                     // if yes, then check if the positions already exists
-                    for(var j = 0; j < len; j++){
-                        if(timesheets[i].week[time.weeknum].positions[j].title = time.position){
+                    for(var j = 0; j < len; j++) {
+                        if (timesheets[i].week[time.weeknum].positions[j].title === time.position) {
+                            posIdx = j;
                             // if it does exist then just append
                             timesheets[i].week[time.weeknum].positions[j].days[time.day].push({
-                                start: time.start,
-                                end: time.end,
+                                hours1: time.hours1,
+                                hours2: time.hours2,
                                 earncode: time.earncode
                             });
-                        }else{
-                            // it it doesn't exist then create a new position
-                            timesheets[i].week[time.weeknum].positions[j].push({
-                                title: time.title,
-                                days: [[], [], [], [], [], [], []]
-                            });
-                            timesheets[i].week[time.weeknum].positions[j].days[time.day].push({
-                                start: time.start,
-                                end: time.end,
-                                earncode: time.earncode
-                            });
+                            break;
                         }
                     }
+
+                    // it it doesn't exist yet, then create a new position
+                    if(posIdx === -1){
+                        timesheets[i].week[time.weeknum].positions.push({
+                            title: time.title,
+                            days: [[], [], [], [], [], [], []]
+                        });
+                        timesheets[i].week[time.weeknum].positions[j].days[time.day].push({
+                            hours1: time.hours1,
+                            hours2: time.hours2,
+                            earncode: time.earncode
+                        });
+                        posIdx = timesheets[i].week[time.weeknum].positions.length - 1;
+                    }
+
                 }else{
                     // no then just create one
                     timesheets[i].week[time.weeknum].positions.push({
@@ -462,11 +517,18 @@ function mergeTimes(timesheets, times){
                         days: [[], [], [], [], [], [], []]
                     });
                     timesheets[i].week[time.weeknum].positions[len].days[time.day].push({
-                        start: time.start,
-                        end: time.end,
+                        hours1: time.hours1,
+                        hours2: time.hours2,
                         earncode: time.earncode
                     });
+
+                    posIdx = timesheets[i].week[time.weeknum].positions.length - 1;
                 }
+                // Approver / status should be the same for all times corresponding to a position
+                // so we can just update each time
+                timesheets[i].week[time.weeknum].positions[posIdx].approver = time.approver;
+                timesheets[i].week[time.weeknum].positions[posIdx].approverid = time.approverid;
+                timesheets[i].week[time.weeknum].positions[posIdx].status = time.status;
             }else{
                 console.log('Could not find header with docid: "' + time.docid + '" for a time!');
             }
