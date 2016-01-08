@@ -16,9 +16,9 @@ WORKDIR /import
 
 # install dependencies
 RUN npm install csv-parse
-RUN npp install fs
-RUN npp install async
-RUN npp install q
-RUN npp install mongodb
-RUN npp install assert
-RUN npp install minimist
+RUN npm install fs
+RUN npm install async
+RUN npm install q
+RUN npm install mongodb
+RUN npm install assert
+RUN npm install minimist
