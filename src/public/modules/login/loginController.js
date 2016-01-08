@@ -21,7 +21,7 @@
                         function(res){
                             // login successful callback
                             $scope.login_error = true;
-                            $location.url('/history/'+res.data.lastYearWorked.toString());
+                            $location.url('/history/'+res.data.latestYearWorked.toString());
                         },
                         function(){
                             // login failure callback

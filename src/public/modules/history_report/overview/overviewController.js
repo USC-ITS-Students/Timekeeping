@@ -2,31 +2,39 @@
     'use strict';
 
     angular.module('app').controller('overviewController', ['$scope', '$location', '$routeParams', 'DataLoader', function ($scope, $location, $routeParams,  DataLoader) {
+        var year = parseInt($routeParams.year);
 
-        DataLoader.load($routeParams.year, function(err){
+        // load data if needed
+        DataLoader.load(year, function(err){
             if(err) console.log(err);
+            else{
+                if(!year || year < $scope.employee.earliestYearWorked || year > $scope.employee.latestYearWorked){
+                    $location.url('/history/'+$scope.employee.latestYearWorked);
+                }
+                // genearate total hours
+                if($scope.timesheets.length > 0){
+                    $scope.total_hours = generateTotalHours($scope.timesheets);
+                }else{
+                    $scope.total_hours = ['0.0', '0.0', '0.0', '0.0', '0.0', '0.0', '0.0'];
+                }
 
-            // genearate total hours
-            if($scope.timesheets.length > 0){
-                $scope.total_hours = generateTotalHours($scope.timesheets);
-            }else{
-                $scope.total_hours = ['0.0', '0.0', '0.0', '0.0', '0.0', '0.0', '0.0'];
-            }
-
-            // load years for dropdown box
-            $scope.years = [];
-            for(var i = 0; i < 10; i++){
-                $scope.years.push($scope.employee.lastYearWorked-i);
+                // load years for dropdown box
+                $scope.years = [];
+                var i = $scope.employee.latestYearWorked;
+                while(i >= $scope.employee.earliestYearWorked){
+                    $scope.years.push(i);
+                    i--;
+                }
             }
         });
 
 
         //Get Timesheet Detail
         $scope.getPeriodDetail = function (timesheet_index) {
-            $location.path('/details/' + $routeParams.year + '/' +  timesheet_index.toString());
+            $location.path('/details/' + year + '/' +  timesheet_index.toString());
         };
 
-        $scope.selectedYear =  parseInt($routeParams.year);
+        $scope.selectedYear =  parseInt(year);
 
         $scope.onChange = function(){
             $location.url('/history/' + $scope.selectedYear);

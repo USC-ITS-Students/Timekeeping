@@ -224,10 +224,11 @@ function processHeader(data){
                     empid: empid,
                     firstname: name.slice(0, name.indexOf(',')),
                     lastname: name.slice(name.indexOf(',')+2, name.length),
-                    lastYearWorked: enddate.getFullYear()
+                    latestYearWorked: enddate.getFullYear(),
+                    earliestYearWorked: enddate.getFullYear()
                 };
 
-                // check if we need to push the employee or update lastYearWorked
+                // check if we need to push the employee or update
                 if(employees.length === 0){
                     employees.push(employee);
                 }else{
@@ -235,7 +236,8 @@ function processHeader(data){
                     for(var i = 0; i < employees.length; i++){
                         if(employees[i].empid === empid){
                             employeeFound = true;
-                            employees[i].lastYearWorked = Math.max(employees[i].lastYearWorked, employee.lastYearWorked);
+                            employees[i].latestYearWorked = Math.max(employees[i].latestYearWorked, employee.latestYearWorked);
+                            employees[i].earliestYearWorked = Math.min(employees[i].earliestYearWorked, employee.earliestYearWorked);
                         }
                     }
                     if(!employeeFound){

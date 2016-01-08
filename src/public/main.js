@@ -24,11 +24,10 @@
 
     //configure routes
     app.config(function($routeProvider){
-        var currentYear = new Date().getFullYear();
         $routeProvider
         // route for the login page
             .when('/', {
-                redirectTo:'/history/'+currentYear
+                redirectTo:'/history/0'
             })
             .when('/login', {
                 templateUrl : 'modules/login/login.html',
@@ -50,7 +49,7 @@
             })
             // Default
             .otherwise({
-                redirectTo: '/history/'+currentYear
+                redirectTo: '/history/0'
             });
     });
 })();
