@@ -10,7 +10,6 @@ COPY earn_summary.csv /import/earn_summary.csv
 COPY header.csv /import/header.csv
 COPY sanctions.csv /import/sanctions.csv
 COPY time.csv /import/time.csv
-COPY ../package.json /import/package.json
 
 # Go to /import
 WORKDIR /import
