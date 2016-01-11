@@ -3,14 +3,17 @@
 
     angular.module('app').controller('overviewController', ['$scope', '$location', '$routeParams', 'DataLoader', function ($scope, $location, $routeParams,  DataLoader) {
         var year = parseInt($routeParams.year);
+        $scope.selectedYear =  parseInt(year); // model for select year dropdown
 
         // load data if needed
         DataLoader.load(year, function(err){
             if(err) console.log(err);
             else{
+                // check if user entered a valid year, if not then redirect them to the latest year they worked
                 if(!year || year < $scope.employee.earliestYearWorked || year > $scope.employee.latestYearWorked){
                     $location.url('/history/'+$scope.employee.latestYearWorked);
                 }
+
                 // genearate total hours
                 if($scope.timesheets.length > 0){
                     $scope.total_hours = generateTotalHours($scope.timesheets);
@@ -18,7 +21,8 @@
                     $scope.total_hours = ['0.0', '0.0', '0.0', '0.0', '0.0', '0.0', '0.0'];
                 }
 
-                // load years for dropdown box
+                // load years for dropdown box, currently only allows user to choose years
+                // between the year that they first worked and last worked
                 $scope.years = [];
                 var i = $scope.employee.latestYearWorked;
                 while(i >= $scope.employee.earliestYearWorked){
@@ -34,13 +38,12 @@
             $location.path('/details/' + year + '/' +  timesheet_index.toString());
         };
 
-        $scope.selectedYear =  parseInt(year);
-
+        // Is called when user selects a new year in the select year dropdown
         $scope.onChange = function(){
             $location.url('/history/' + $scope.selectedYear);
         };
 
-
+        // returns an array of all of the total hours per type and grand total
         function generateTotalHours(timesheets){
             // calculate total hours by type for the year
             var totals =  timesheets

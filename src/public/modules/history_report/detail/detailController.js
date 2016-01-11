@@ -4,7 +4,7 @@
     angular.module('app')
         .controller('detailController', ['$scope', '$location', '$routeParams', '$filter', 'DataLoader', function ($scope, $location, $routeParams, $filter, DataLoader) {
 
-            // load data
+            // load data if needed
             DataLoader.load($routeParams.year, function(err){
                 if(err) console.log(err);
                 else{
