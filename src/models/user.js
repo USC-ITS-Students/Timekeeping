@@ -18,6 +18,10 @@ UserSchema.statics.login = function(empid, password, cb){
                     }
                 }
             });
+        }else{
+            if(typeof cb === 'function'){
+                cb('incorrect password.');
+            }
         }
     };
 

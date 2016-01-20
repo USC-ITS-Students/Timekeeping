@@ -16,7 +16,7 @@ if(process.argv[2] === 'production'){
 }
 
 mongoose.connect(dbhost + ':27017/Timesheet');
-var User =  require('./models/user');
+var User =  require('./models').UserModel;
 
 // Don't serve front-end in production, when nginx is installed
 //if(process.argv[2] !== 'production'){

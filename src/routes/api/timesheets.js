@@ -1,5 +1,5 @@
 var router = require('express').Router();
-var Timesheet = require('../../models/timesheet');
+var Timesheet = require('../../models').TimesheetModel;
 
 router.get('/:year',
     function(req, res){

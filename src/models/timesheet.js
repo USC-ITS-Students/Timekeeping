@@ -23,17 +23,6 @@ var TimesheetSchema = new mongoose.Schema({
     week: []
 });
 
-TimesheetSchema.statics.getByOwner = function(owner, cb){
-    this.find({owner:owner}, function(err, docs){
-        if(typeof cb === 'function'){
-            if(err) cb(err);
-            else{
-                cb(null, docs)
-            }
-        }
-    });
-};
-
 TimesheetSchema.statics.getByYear = function(owner, year, cb){
     if(typeof year !== 'number'){
         year = parseInt(year);

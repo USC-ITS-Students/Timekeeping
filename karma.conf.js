@@ -29,7 +29,7 @@ module.exports = function(config) {
         'node_modules/angular/angular.js',
         'node_modules/angular-mocks/angular-mocks.js',
         'src/public/**.js',
-        'tests/**.js'
+        'test/**.js'
     ],
 
 
@@ -68,11 +68,11 @@ module.exports = function(config) {
     logLevel: config.LOG_INFO,
 
 
-    // enable / disable watching file and executing tests whenever any file changes
+    // enable / disable watching file and executing test whenever any file changes
     autoWatch: true,
 
     // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
+    // if true, Karma captures browsers, runs the test and exits
     singleRun: true
 
  });
