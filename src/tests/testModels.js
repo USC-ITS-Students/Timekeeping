@@ -21,11 +21,9 @@ describe('Models', function(){
                 var empid = '1234567',
                     password = 'test123';
                 User.login(empid, password, function(err, user){
-                    if(err) done(err);
-                    else{
-                        expect(user).to.be.ok;
-                        done();
-                    }
+                    expect(err).to.not.be.ok;
+                    expect(user).to.be.ok;
+                    done();
                 });
             });
 
