@@ -1,18 +1,18 @@
 db:
-  #build: data/.
   image: mongo
   ports:
    - "27017:27017"
+
 dbimport:
   build: data/.
   links:
    - db
-  command: node DataImport.js -f header.csv -e earn_summary.csv -s sanctions.csv -t time.csv -c mongodb://db/27017/Timesheet
+  command: node DataImport.js -f header.csv -e earn_summary.csv -s sanctions.csv -t time.csv -c mongodb://db:27017/Timesheet
 
 web:
   build: .
   ports:
-     - "8080:3000"
+     - "3000:3000"
   # Docker file for Node.js handles redirection and source folder definition
   links:
    - db
