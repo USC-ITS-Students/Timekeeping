@@ -1,0 +1,18 @@
+<form id="login" ng-submit="submit()">
+    <div class="row">
+        <div class="medium-4 medium-centered columns">
+            <input id="empid" type="text" placeholder="Employe ID" ng-model="empid" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="medium-4 medium-centered columns">
+            <input id="pwd" type="password" placeholder="Password" ng-model="password" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="medium-4 medium-centered medium-text-right columns">
+            <p ng-show="login_error" class="inline">{{error_message}}</p>
+            <input id="submit-button" type="submit" value="Submit"/>
+        </div>
+    </div>
+</form>

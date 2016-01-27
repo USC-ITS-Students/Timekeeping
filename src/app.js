@@ -18,10 +18,10 @@ if(process.argv[2] === 'production'){
 mongoose.connect(dbhost + ':27017/Timesheet');
 var User =  require('./models').UserModel;
 
-// Don't serve front-end in production, when nginx is installed
-//if(process.argv[2] !== 'production'){
+// Don't serve front-end in production, nginx serves public
+if(process.argv[2] !== 'production'){
     app.use(express.static(__dirname + '/public'));
-//}
+}
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

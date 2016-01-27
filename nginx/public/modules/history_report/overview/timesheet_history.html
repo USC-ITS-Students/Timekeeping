@@ -1,0 +1,53 @@
+﻿<div id="history_report" class="padding-10">
+    <h4>Timesheet History Report</h4>
+    <div>
+        <table id="employee_overview">
+            <tr><td>Employee Name</td><td>{{employee.firstname}} {{employee.lastname}}</td></tr>
+            <tr><td>Employee ID Number</td><td>{{employee.empid}}</td></tr>
+        </table>
+    </div>
+    <div id="year_selector">
+        <label>
+            <span>Year: </span>
+            <select ng-model="selectedYear" ng-options="year for year in years" ng-change="onChange()">
+            </select>
+        </label>
+    </div>
+    <table id="pay-period-table">
+        <thead>
+            <tr>
+                <th>Period End Date</th>
+                <th>Regular</th>
+                <th>Over time</th>
+                <th>Double time</th>
+                <th>Vac</th>
+                <th>Sick</th>
+                <th>Other Paid</th>
+                <th>Other Unpaid</th>
+                <th>Total Hours</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="timesheet in timesheets | orderBy:'-end'">
+                <td id="period-dates" ng-click="getPeriodDetail($index+1)"><a>{{timesheet.end | date:'yyyy-MM-dd' : 'UTC' }}</a></td>
+                <td>{{timesheet.hourTypeTotals['Regular'] | number:1}}</td>
+                <td>{{timesheet.hourTypeTotals['Overtime'] | number:1}}</td>
+                <td>{{timesheet.hourTypeTotals['Double Time'] | number:1}}</td>
+                <td>{{timesheet.hourTypeTotals['Vacation'] | number:1}}</td>
+                <td>{{timesheet.hourTypeTotals['Sick'] | number:1}}</td>
+                <td>{{timesheet.hourTypeTotals['Other Paid'] | number:1}}</td>
+                <td>{{timesheet.hourTypeTotals['Other Unpaid'] | number:1}}</td>
+                <td>{{timesheet.week[0].grandTotal.total + timesheet.week[1].grandTotal.total | number:1}}</td>
+                <td>{{timesheet.status}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Total Hours:</td>
+                <td ng-repeat="hours in total_hours track by $index">{{hours | number:1}}</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

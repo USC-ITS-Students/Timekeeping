@@ -1,7 +1,37 @@
+nginx:
+    build: ./nginx
+    links:
+        - node1:node1
+        - node2:node2
+        - node3:node3
+    ports:
+        - "80:80"
+
+node1:
+  build: .
+  ports:
+     - "3000"
+  links:
+   - db
+
+node2:
+  build: .
+  ports:
+     - "3000"
+  links:
+   - db
+
+node3:
+  build: .
+  ports:
+     - "3000"
+  links:
+   - db
+
 db:
   image: mongo
   ports:
-   - "27017:27017"
+   - "27017"
 
 dbimport:
   build: data/.
@@ -9,10 +39,3 @@ dbimport:
    - db
   command: node DataImport.js -f header.csv -e earn_summary.csv -s sanctions.csv -t time.csv -c mongodb://db:27017/Timesheet
 
-web:
-  build: .
-  ports:
-     - "3000:3000"
-  # Docker file for Node.js handles redirection and source folder definition
-  links:
-   - db
