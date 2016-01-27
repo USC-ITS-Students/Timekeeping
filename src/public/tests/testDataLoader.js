@@ -40,8 +40,8 @@ describe('Data Loader Service', function(){
 
             DataLoader.load(2015, function(err){
                 expect(err).toEqual(null);
-                expect(rootScope.user.empid).toEqual('7654321');
-                expect(rootScope.timesheet.owner).toEqual('7654321');
+                expect(rootScope.employee.empid).toEqual('7654321');
+                expect(rootScope.timesheets[0].owner).toEqual('7654321');
             });
 
             httpBackend.flush();

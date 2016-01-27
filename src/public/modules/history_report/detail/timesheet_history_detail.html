@@ -58,15 +58,14 @@
 
                 <!-- row for each earn code -->
                 <td colspan="8">
-                    <table>
+                    <table class="border-collapse-separate">
                         <tr colspan="" ng-repeat="(code, data) in row.earnCodes">
                             <!-- earn code type-->
                             <td colspan="1">{{code}}</td>
                             <!-- earn code type-->
-
                             <!-- row for each necessary row of hours -->
-                            <td colspan="7">
-                                <table>
+                            <td colspan="7" class="padding-right-none">
+                                <table class="border-collapse-separate padding-left-30">
                                     <tr ng-repeat="i in generateRange(data.rowspan)">
                                         <td colspan="1" ng-repeat="day in generateRange(7)">
                                             <div ng-show="data.days[day][i].hours1 && data.days[day][i].hours2">
@@ -139,15 +138,14 @@
 
             <!-- row for each earn code -->
             <td colspan="8">
-                <table>
+                <table class="border-collapse-separate">
                     <tr colspan="" ng-repeat="(code, data) in row.earnCodes">
                         <!-- earn code type-->
                         <td colspan="1">{{code}}</td>
                         <!-- earn code type-->
-
                         <!-- row for each necessary row of hours -->
-                        <td colspan="7">
-                            <table>
+                        <td colspan="7" class="padding-right-none">
+                            <table class="border-collapse-separate padding-left-30">
                                 <tr ng-repeat="i in generateRange(data.rowspan)">
                                     <td colspan="1" ng-repeat="day in generateRange(7)">
 
@@ -183,13 +181,13 @@
         <tfoot>
             <tr>
                 <td colspan="2" class="width-25p font-normal">I was <u>not</u> provided the appropriate rest periods to which I am entitled under USC's policy for the following days</td>
-                <td ng-repeat="sanction in timesheet.week[1].aRestSanctions track by $index" class="text-center"><input ng-checked="sanction === 'Y'" disabled type="checkbox"/></td>
+                <td ng-repeat="sanction in timesheet.week[1].aRestSanctions track by $index" class="text-center"><input ng-checked="sanction === 'Y'" disabled type="checkbox" /></td>
                 <td class="width-10p"></td>
                 <td class="width-10p"></td>
             </tr>
             <tr>
                 <td colspan="2" class="width-25p font-normal">I was <u>not</u> provided the appropriate meal periods to which I am entitled under USC's policy for the following days</td>
-                <td ng-repeat="sanction in timesheet.week[1].bMealsSanctions track by $index" class="text-center"><input ng-checked="sanction === 'Y'" disabled type="checkbox"/></td>
+                <td ng-repeat="sanction in timesheet.week[1].bMealsSanctions track by $index" class="text-center"><input ng-checked="sanction === 'Y'" disabled type="checkbox" /></td>
                 <td class="width-10p"></td>
                 <td class="width-10p"></td>
             </tr>
