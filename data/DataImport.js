@@ -84,7 +84,7 @@ function main(){
                 // insert to db
                 Q.when([
                     // insert employees
-                    db.collection('users').insert(merged_data.employees/*.slice(1, merged_data.employees.length)*/),
+                    db.collection('users').insert(merged_data.employees),
                     // insert timesheets
                     db.collection('timesheets').insert(merged_data.timesheets)
                 ]).then(
