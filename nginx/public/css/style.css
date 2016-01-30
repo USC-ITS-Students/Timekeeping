@@ -57,6 +57,18 @@ a:hover{
     border-bottom-width:2px;
 }
 
+.border-collapse-separate{
+    border-collapse:separate;
+}
+
+.padding-right-none{
+    padding-right:0px;
+}
+
+.padding-left-30{
+    padding-left:30px;
+}
+
 /*View Specific*/
 
 #login{
