@@ -4,7 +4,6 @@
     angular.module('app').controller('overviewController', ['$scope', '$location', '$routeParams', 'DataLoader', function ($scope, $location, $routeParams,  DataLoader) {
         var year = parseInt($routeParams.year);
         $scope.selectedYear =  parseInt(year); // model for select year dropdown
-
         // load data if needed
         DataLoader.load(year, function(err){
             if(err) console.log(err);
@@ -16,22 +15,16 @@
 
                 // genearate total hours
                 if($scope.timesheets.length > 0){
-                    $scope.total_hours = generateTotalHours($scope.timesheets);
+                    $scope.total_hours = $scope.calculateTotalHours($scope.timesheets);
                 }else{
                     $scope.total_hours = ['0.0', '0.0', '0.0', '0.0', '0.0', '0.0', '0.0'];
                 }
 
                 // load years for dropdown box, currently only allows user to choose years
                 // between the year that they first worked and last worked
-                $scope.years = [];
-                var i = $scope.employee.latestYearWorked;
-                while(i >= $scope.employee.earliestYearWorked){
-                    $scope.years.push(i);
-                    i--;
-                }
+                $scope.years = $scope.calculateYearsWorked($scope.employee.earliestYearWorked, $scope.employee.latestYearWorked);
             }
         });
-
 
         //Get Timesheet Detail
         $scope.getPeriodDetail = function (timesheet_index) {
@@ -44,7 +37,7 @@
         };
 
         // returns an array of all of the total hours per type and grand total
-        function generateTotalHours(timesheets){
+        $scope.calculateTotalHours = function(timesheets){
             // calculate total hours by type for the year
             var totals =  timesheets
                             // map each timesheet to an array of their hour types
@@ -79,7 +72,18 @@
                     })
             );
             return totals;
-        }
+        };
+
+        //returns array containing the years the user has worked
+        $scope.calculateYearsWorked = function (earliestYearWorked, latestYearWorked){
+            var result = [];
+            while(latestYearWorked >= earliestYearWorked){
+                    result.push(latestYearWorked);
+                    latestYearWorked--;
+            }
+            return result;
+        };
+
     }]);
 })();
 

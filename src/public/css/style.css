@@ -61,12 +61,22 @@ a:hover{
     border-collapse:separate;
 }
 
+.padding-left-none{
+    padding-left:0px;
+}
+
 .padding-right-none{
     padding-right:0px;
 }
 
 .padding-left-30{
     padding-left:30px;
+}
+
+.tfoot-border{
+    border-top: grey;
+    border-top-style: solid;
+    border-top-width: 1px;
 }
 
 /*View Specific*/

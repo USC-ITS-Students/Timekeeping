@@ -1,7 +1,7 @@
 ﻿<div id="history_detail_report" class="padding-10">
     <h4>Timesheet History</h4>
     <div class="row" id="overview">
-        <div class="columns large-10 small-10 columns">
+        <div class="columns large-10 small-10 columns padding-left-none">
             <table id="employee_overview" class="border-none">
                 <tr>
                     <td class="font-bold">Employee Name</td>
@@ -104,7 +104,7 @@
                 <td class="width-10p"></td>
                 <td class="width-10p"></td>
             </tr>
-            <tr>
+            <tr class="tfoot-border">
                 <td colspan="2" class="width-25p font-normal">I was <u>not</u> provided the appropriate meal periods to which I am entitled under USC's policy for the following days</td>
                 <td ng-repeat="sanction in timesheet.week[0].bMealsSanctions track by $index" class="text-center"><input ng-checked="sanction === 'Y'" disabled type="checkbox"/></td>
                 <td class="width-10p"></td>
@@ -185,7 +185,7 @@
                 <td class="width-10p"></td>
                 <td class="width-10p"></td>
             </tr>
-            <tr>
+            <tr class="tfoot-border">
                 <td colspan="2" class="width-25p font-normal">I was <u>not</u> provided the appropriate meal periods to which I am entitled under USC's policy for the following days</td>
                 <td ng-repeat="sanction in timesheet.week[1].bMealsSanctions track by $index" class="text-center"><input ng-checked="sanction === 'Y'" disabled type="checkbox" /></td>
                 <td class="width-10p"></td>
