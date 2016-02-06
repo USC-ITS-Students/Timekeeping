@@ -10,16 +10,18 @@ describe('OverviewController', function(){
     var mockLocation = {path: function (val){}, url: function (){}};
 
     var employee = {
-                    empid: "7654321",
-                    firstname: "Qwerty",
-                    lastname: "Asdf",
+                    empid: "12345678",
+                    firstname: "Josh",
+                    lastname: "Smith",
                     latestYearWorked: 2015,
                     earliestYearWorked: 2013
                     };
 
+    var yearsWorked = [2015,2014,2013]; //based on earliestYearWorked & latestYearWorked
+
     var timesheets = [
                         {
-                            owner: "7654321",
+                            owner: "12345678",
                             start: "2015-01-01T08:00:00.000Z",
                             end: "2015-01-14T08:00:00.000Z",
                             hourTypeTotals: {
@@ -41,7 +43,7 @@ describe('OverviewController', function(){
                             ]
                         },
                         {
-                            owner: "7654321",
+                            owner: "12345678",
                             start: "2015-15-01T08:00:00.000Z",
                             end: "2015-01-28T08:00:00.000Z",
                             hourTypeTotals: {
@@ -64,8 +66,7 @@ describe('OverviewController', function(){
                         }
                     ];
     
-    var yearsWorked = [2015,2014,2013];
-    var totalHours = [80,14,0,11,1,0,0,106]; //total hours per type
+    var totalHours = [80,14,0,11,1,0,0,106]; //total hours by hourTypeTotals from all timesheets
 
     beforeEach(module('app'));
 

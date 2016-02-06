@@ -10,14 +10,14 @@
                 else{
                     var weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                     $scope.timesheet = $filter('orderBy')($scope.timesheets, '-end')[$routeParams.timesheet - 1];
-                    $scope.Dates = generateWeekDates($scope.timesheet.start).map(function(date){
+                    $scope.Dates = $scope.generateWeekDates($scope.timesheet.start).map(function(date){
                         return {
                             Day: weekdays[date.getDay()],
                             Date: ('0' + (date.getMonth()+1).toString()).slice(-2) + '/' + ('0' + (date.getDate()).toString()).slice(-2)
                         };
                     });
 
-                    populateHours();
+                    $scope.populateHours();
                 }
             });
 
@@ -42,7 +42,7 @@
 
             // helper functions
             // generates the dates associated with the timesheet
-            function generateWeekDates(start){
+            $scope.generateWeekDates = function(start){
                 var startDate = new Date(start);
                 var dates = [startDate];
                 for(var i = 0; i < 13; i++){
@@ -55,13 +55,13 @@
             }
 
             // creates two arrays that are used to populate the weeks' hours
-            function populateHours(){
-                $scope.week1HoursTable = generateHoursTable($scope.timesheet.week[0]);
-                $scope.week2HoursTable = generateHoursTable($scope.timesheet.week[1]);
+            $scope.populateHours = function(){
+                $scope.week1HoursTable = $scope.generateHoursTable($scope.timesheet.week[0]);
+                $scope.week2HoursTable = $scope.generateHoursTable($scope.timesheet.week[1]);
             }
 
             // convers a week's data into a table that can be used in the view
-            function generateHoursTable(week){
+            $scope.generateHoursTable = function(week){
                 var table = [];
                 if(week.positions.length) {
                     week.positions.forEach(function (pos) {
@@ -82,7 +82,6 @@
                                         days: [[], [], [], [], [], [], []],
                                         rowspan: 1
                                     }
-
                                 }
                                 // insert hours into the corresponding day for that earncode.
                                 earnCodes[hours.earncode].days[i].push({hours1: hours.hours1, hours2: hours.hours2});
