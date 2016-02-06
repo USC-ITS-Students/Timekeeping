@@ -1,5 +1,6 @@
 nginx:
-    build: ./nginx
+    build: .
+    dockerfile: DockerNginx
     links:
         - node1:node1
         - node2:node2
@@ -34,9 +35,8 @@ db:
    - "27017"
 
 # Only Run dbimport for first time building environment or if adding new data.
-#dbimport:
-#  build: data/.
-#  links:
-#   - db
-#  command: node DataImport.js -f header.csv -e earn_summary.csv -s sanctions.csv -t time.csv -c mongodb://db:27017/Timesheet
-
+dbimport:
+  build: data/.
+  links:
+   - db
+  command: node DataImport.js -f header.csv -e earn_summary.csv -s sanctions.csv -t time.csv -c mongodb://db:27017/Timesheet

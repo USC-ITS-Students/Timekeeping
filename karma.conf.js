@@ -25,15 +25,16 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+	    'node_modules/angular/angular.js',
         'node_modules/angular-mocks/angular-mocks.js',
         'node_modules/angular-route/angular-route.js',
-        'src/public/**/*.js'
+        'public/**/*.js'
     ],
 
 
     // list of files to exclude
     exclude: [
-        'src/public/css/**/*.js'
+        'public/css/**/*.js'
     ],
 
 
@@ -48,7 +49,7 @@ module.exports = function(config) {
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress', 'dots', 'junit'],
     junitReporter:  {
-        outputDir: 'test_reports/',
+        outputDir: '/reports',
         outputFile: 'test-results.xml',
         useBrowserName: false
     },
