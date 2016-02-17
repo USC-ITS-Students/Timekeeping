@@ -1,7 +1,4 @@
-# install and start mongodb
-#FROM mongo:latest
-
-FROM node
+FROM node:latest
 
 # create /import folder to dump files
 RUN mkdir /import

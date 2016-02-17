@@ -44,6 +44,7 @@
             // generates the dates associated with the timesheet
             $scope.generateWeekDates = function(start){
                 var startDate = new Date(start);
+                startDate.setHours(0, 0, 0, 0);
                 var dates = [startDate];
                 for(var i = 0; i < 13; i++){
                     var next = new Date();

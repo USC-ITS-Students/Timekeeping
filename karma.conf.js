@@ -35,7 +35,7 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
-        'public/css/**/*.js'
+        'src/public/css/**/*.js'
     ],
 
 
@@ -50,7 +50,7 @@ module.exports = function(config) {
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress', 'dots', 'junit'],
     junitReporter:  {
-        outputDir: '/reports',
+        outputDir: 'test-reports/',
         outputFile: 'test-results.xml',
         useBrowserName: false
     },

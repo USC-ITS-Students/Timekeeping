@@ -42,6 +42,7 @@
     "karma-requirejs": "^0.2.3",
     "mockgoose": "^5.2.2",
     "phantomjs": "^1.9.18",
-    "requirejs": "^2.1.22"
+    "requirejs": "^2.1.22",
+    "underscore": "^1.8.3"
   }
 }
