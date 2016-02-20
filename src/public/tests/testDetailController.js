@@ -81,7 +81,7 @@ describe('DetailController', function(){
     it('should generateWeekDates(start)', function(){
         var dates = scope.generateWeekDates(timesheets[0].start);
         for(var i = 0; i < dates.length; i++){
-            expect(dates[0]).toEqual(new Date(weekDates[0]));
+            expect(dates[i]).toEqual(new Date(weekDates[i]));
         }
     });
 

@@ -1,0 +1,32 @@
+FROM node:latest
+
+
+# Create directories
+RUN	mkdir /test
+RUN	mkdir /test/test-reports
+
+# Mount Volume for storing reports
+VOLUME	test-reports/ /test/test-reports
+
+# Copy over necessary files
+COPY 	src/public/ /test/src//public
+COPY 	karma.conf.js /test/karma.conf.js
+COPY 	package.json /test/package.json
+
+# install dependencies
+WORKDIR /test
+#RUN	yum install -y bzip2 freetype fontconfig
+RUN	npm install angular
+RUN	npm install angular-mocks
+RUN npm install angular-route
+RUN	npm install underscore
+RUN	npm install -g karma
+RUN npm install -g phantomjs
+RUN npm install -g phantomjs-prebuilt
+RUN npm install -g jasmine-core
+RUN	npm install -g karma-jasmine
+RUN	npm install -g karma-junit-reporter
+RUN	npm install -g karma-phantomjs-launcher
+
+# Run tests
+CMD ["karma", "start"]

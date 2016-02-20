@@ -1,6 +1,6 @@
 nginx:
     build: .
-    dockerfile: DockerNginx
+    dockerfile: Docker-Nginx
     links:
         - node1:node1
         - node2:node2
@@ -10,24 +10,27 @@ nginx:
 
 node1:
   build: .
+  dockerfile: Docker-Node
   ports:
      - "3000"
   links:
-   - db
+   - db:db
 
 node2:
   build: .
+  dockerfile: Docker-Node
   ports:
      - "3000"
   links:
-   - db
+   - db:db
 
 node3:
   build: .
+  dockerfile: Docker-Node
   ports:
      - "3000"
   links:
-   - db
+   - db:db
 
 db:
   image: mongo
