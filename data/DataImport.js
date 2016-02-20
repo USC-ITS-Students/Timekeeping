@@ -22,6 +22,7 @@ var parser = require('csv-parse'),
             "-e: Earn summary .csv file;      should be placed in same folder as this script         **Required**\n" +
             "-s: Sanctions .csv file;         should be placed in same folder as this script         **Required**\n" +
             "-t: Time .csv file;              should be placed in same folder as this script         **Required**\n" +
+            "-p: Principal Prop .csv file;    should be placed in same folder as this script         **Required**\n" +
             "-c: Mongodb connection string;   'mongodb://localhost:27017/Timesheet' by default\n" +
             "-h or --help: This menu.";
 
@@ -36,10 +37,11 @@ var headerFile = argv.f,
     earnSummaryFile = argv.e,
     sanctionsFile = argv.s,
     timeFile = argv.t,
+    propertiesFile = argv.p,
     connectionString = argv.c;
 
 // check if all required arguments have been given
-if(headerFile && earnSummaryFile && sanctionsFile && timeFile){
+if(headerFile && earnSummaryFile && sanctionsFile && timeFile && propertiesFile){
     // Start program
     main();
 }else{
@@ -112,7 +114,8 @@ function parse() {
         parseHeader(__dirname + '/' + headerFile),
         parseEarnSummary(__dirname + '/' + earnSummaryFile),
         parseSanctions(__dirname + '/' + sanctionsFile),
-        parseTime(__dirname + '/' + timeFile)
+        parseTime(__dirname + '/' + timeFile),
+        parseProperties(__dirname + '/' + propertiesFile)
     ]).then(function(callbacks){
         var data = {};
 
@@ -129,6 +132,9 @@ function parse() {
         callbacks[3](function(ret){
             data.times = ret;
         });
+        callbacks[4](function(ret){
+            data.properties = ret;
+        });
 
         return data;
     });
@@ -137,6 +143,7 @@ function parse() {
 // MAIN MERGE FUNCTION: merges the summaries, sanctions and times into corresponding timesheets
 function merge(data){
     return Q.when([
+        mergeEmployeesInfo(data.employees, data.properties),
         mergeSummaries(data.timesheets, data.summaries),
         mergeSanctions(data.timesheets, data.sanctions),
         mergeTimes(data.timesheets, data.times)
@@ -184,6 +191,16 @@ function parseTime(file){
         .then(function(data){
             return processTime(data);
         });
+}
+
+function parseProperties(file){
+    return Q.nfcall(fs.readFile, file, 'utf-8')
+        .then(function(text){
+            return Q.nfcall(parser, text);
+        })
+        .then(function(data){
+            return processProperties(data);
+        })
 }
 
 // PROCESS FUNCTIONS: Turn parsed csv files into JS Objects ready to be merged
@@ -415,8 +432,60 @@ function processTime(data){
     });
 }
 
+function processProperties(data){
+    return Q(function(resolve, reject){
+        var properties = [];
+        async.each(
+            data, // array of rows
+            // function to apply on each row
+            function(doc, callback){
+                var principal_id = doc[0],
+                    empid = doc[20];
+
+                var property = {
+                    empid: empid,
+                    principal_id: principal_id
+                };
+
+                properties.push(property);
+
+                callback();
+            },
+            // when done:
+            function(err){
+                if(err) return reject(err);
+                return resolve(properties);
+            }
+        );
+    });
+}
+
 
 // MERGE FUNCTIONS: After parsing in the data, the data is all merged into two types of objects, timesheets and employees
+function mergeEmployeesInfo(employees, properties){
+    // merge principal id with employee
+    async.each(
+        properties,
+        function(property){
+            var employeeFound = false;
+            for(var i = 0; i < employees.length; i++){
+                if(employees[i].empid === property.empid){
+                    employeeFound = true;
+                    employees[i].principal_id = property.principal_id;
+                    console.log('Found properties empid: "' + property.empid + '"in employees!');
+                }
+            }
+            if(!employeeFound){
+                //console.log('Could not find properties empid: "' + property.empid + '"in employees!');
+            }
+        },
+        // when done:
+        function(err){
+            if(err) console.log(err);
+        }
+    );
+}
+
 function mergeSummaries(timesheets, summaries){
     // merge grand totals
     async.each(
