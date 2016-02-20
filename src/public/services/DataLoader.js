@@ -34,6 +34,21 @@
             }
         }
 
+        // this function deals with loading the timesheets managed by supervisor
+        function loadSupervisorEmployees(){
+            if(!$rootScope.supervisorEmployees){
+                // need to load the timesheets
+                return $http.get('api/users/employees').then(function (data) {
+                    $rootScope.supervisorEmployees = data.data;
+                });
+            }else{
+                // timesheets already loaded
+                var deferred = $q.defer();
+                deferred.resolve();
+                return deferred.promise;
+            }
+        }
+
         // this function makes sure that both the em
         this.load = function (year, cb) {
             $q.all([
@@ -48,6 +63,20 @@
                 }
             );
 
+        }
+
+        this.loadSupervisor = function (cb) {
+            $q.all([
+                loadEmployee(),
+                loadSupervisorEmployees()
+            ]).then(
+                function(){
+                    if(typeof cb === 'function') cb(null);
+                },
+                function(err){
+                    if(typeof cb === 'function') cb(err);
+                }
+            );
         }
     }]);
 })();

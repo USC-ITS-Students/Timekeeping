@@ -47,6 +47,20 @@
                     loggedin: checkloggedin
                 }
             })
+            .when('/supervisor', {
+                templateUrl: 'modules/supervisor/employee_overview.html',
+                controller:  'supervisorController',
+                resolve: {
+                    loggedin: checkloggedin
+                }
+            })
+            .when('/history/:employee/0', {
+                templateUrl: 'modules/history_report/overview/timesheet_history.html',
+                controller:  'overviewController',
+                resolve: {
+                    loggedin: checkloggedin
+                }
+            })
             // Default
             .otherwise({
                 redirectTo: '/history/0'
