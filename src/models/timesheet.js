@@ -44,6 +44,20 @@ TimesheetSchema.statics.getByYear = function(owner, year, cb){
     });
 };
 
+TimesheetSchema.statics.getEmployeesByTimesheetApprover = function(approverid, cb){
+    query = {
+        'week.positions.approverid':''+approverid+''
+    };
+    this.find(query, 'owner', function(err, docs){
+        if(typeof cb === 'function'){
+            if(err) cb(err);
+            else{
+                cb(null, docs)
+            }
+        }
+    });
+};
+
 
 
 // Exports ---

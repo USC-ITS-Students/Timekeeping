@@ -1,5 +1,11 @@
 /*General*/
 
+@media print{
+    body{
+        zoom:75%;
+    }
+ }
+
 h1,h2,h3,h4,h5,h6{
     color: #990000;
 }
@@ -73,6 +79,13 @@ a:hover{
     padding-left:30px;
 }
 
+.table-style1{
+    border-collapse: inherit;
+    border-width: 2px;
+    border-style: groove;
+    border-color:gainsboro;
+}
+
 .tfoot-border{
     border-top: grey;
     border-top-style: solid;
@@ -112,12 +125,12 @@ a:hover{
     min-width:955px;
 }
 
-#pay-period-table thead, #pay-detail-week thead, #pay-detail-week2 thead{
+#pay-period-table thead, #pay-detail-week thead, #pay-detail-week2 thead, #supervisor-employees thead{
     background-color: #990000;
     color: #FFCC00;
 }
 
-#pay-period-table #period-dates a{
+#pay-period-table #period-dates a, #supervisor-employees #employee-names a{
     color: #990000;
 }
 

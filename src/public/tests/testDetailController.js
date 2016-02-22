@@ -103,6 +103,6 @@ describe('DetailController', function(){
         expect(table[0].earnCodes[1]).toBeDefined();
         expect(table[0].earnCodes[1].days[2].hours1).toEqual(scope.timesheet.week[1].positions[0].days[2].hours1); //should match timesheet
         expect(table[0].earnCodes[1].days[2].hours2).toEqual(scope.timesheet.week[1].positions[0].days[2].hours2);
-        expect(table[0].rowspan).toEqual(1)
+        expect(table[0].rowspan).toEqual(1);
     });
 });
