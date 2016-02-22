@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 var app = express();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var SamlStrategy = require('passport-saml').Strategy;
 var cookieSession = require('cookie-session');
 
 var dbhost = 'localhost';
@@ -34,17 +35,48 @@ app.use(cookieSession({
     keys: ['keyboard cat', 'piano dog']
 }));
 
-// set up passport
-passport.use(new LocalStrategy(
+// // set up passport
+// passport.use(new LocalStrategy(
+//     function(empid, password, done){
+//         User.login(empid, password, function(err, docs){
+//             if(err) return done(err);
+//             else{
+//                 return done(null, docs)
+//             }
+//         });
+//     }
+// ));
+
+passport.use(new SamlStrategy(
+    {
+    path: '/login/callback',
+    entryPoint: 'https://shibboleth-test.usc.edu/shibboleth-idp',
+    issuer: 'passport-saml'
+    },
     function(empid, password, done){
         User.login(empid, password, function(err, docs){
             if(err) return done(err);
-            else{
-                return done(null, docs)
-            }
+            else return done(null, docs);
         });
     }
 ));
+
+app.post('/login/callback',
+  passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
+  function(req, res) {
+    console.log('callbacks');
+    res.redirect('/');
+  }
+);
+
+app.get('/login',
+  passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
+  function(req, res) {
+    console.log('login');
+    res.redirect('/');
+  }
+);
+
 passport.serializeUser(function(user, done){
     done(null, user._id);
 });
