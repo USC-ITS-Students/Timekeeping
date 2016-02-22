@@ -81,6 +81,7 @@ function main(){
                     delete timesheet.docid;
                 });
 
+                console.log(merged_data.timesheets);
                 // insert to db
                 Q.when([
                     // insert employees

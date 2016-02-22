@@ -2,6 +2,7 @@ var router = require('express').Router();
 var Timesheet = require('../../models').TimesheetModel;
 
 router.get('/:year',
+    //TODO: Add way for supervisors to retreive employee objects
     function(req, res){
         // check if user is logged in
         if(req.isAuthenticated()){
