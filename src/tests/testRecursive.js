@@ -39,7 +39,7 @@ describe('Models', function(){
     //     });
     // });
 
-    describe('TimesheetModel', function(){
+    describe('TimsheetModel', function(){
         this.timeout(5000);
         var Timesheet = models.TimesheetModel;
         describe('#getByYear(owner, year, callback)', function(){

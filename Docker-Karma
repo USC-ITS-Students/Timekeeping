@@ -21,7 +21,6 @@ RUN	npm install angular-mocks
 RUN npm install angular-route
 RUN	npm install underscore
 RUN	npm install -g karma
-RUN npm install -g phantomjs
 RUN npm install -g phantomjs-prebuilt
 RUN npm install -g jasmine-core
 RUN	npm install -g karma-jasmine

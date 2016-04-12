@@ -1,0 +1,20 @@
+FROM node:latest
+
+
+# Create directories
+RUN	mkdir /test
+
+# Copy over necessary files
+COPY 	src/models/ /test/src//models
+COPY 	src/tests/ /test/src/tests
+COPY 	package.json /test/package.json
+
+# install dependencies
+WORKDIR /test
+RUN npm install chai
+RUN npm install mongoose
+RUN	npm install -g mocha
+
+
+# Run tests
+CMD ["mocha", "/test/src/tests"]
