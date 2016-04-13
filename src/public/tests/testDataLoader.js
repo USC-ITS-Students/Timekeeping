@@ -42,9 +42,10 @@ describe('Data Loader Service', function(){
                 expect(err).toEqual(null);
                 expect(rootScope.employee.empid).toEqual('7654321');
                 expect(rootScope.timesheets[0].owner).toEqual('7654321');
+                httpBackend.flush();
             });
+            
 
-            httpBackend.flush();
         });
     });
 });
