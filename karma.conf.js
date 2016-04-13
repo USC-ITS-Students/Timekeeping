@@ -51,7 +51,7 @@ module.exports = function(config) {
     reporters: ['progress', 'dots', 'junit'],
     junitReporter:  {
         outputDir: 'test-reports/',
-        outputFile: 'test-results.xml',
+        outputFile: 'karma-results.xml',
         useBrowserName: false
     },
 

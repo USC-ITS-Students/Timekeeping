@@ -3,6 +3,10 @@ FROM node:latest
 
 # Create directories
 RUN	mkdir /test
+RUN	mkdir /test/test-reports
+
+# Mount Volume for storing reports
+VOLUME	test-reports/ /test/test-reports
 
 # Copy over necessary files
 COPY 	src/models/ /test/src//models
@@ -13,8 +17,9 @@ COPY 	package.json /test/package.json
 WORKDIR /test
 RUN npm install chai
 RUN npm install mongoose
+RUN npm install -g xunit-file
 RUN	npm install -g mocha
 
 
 # Run tests
-CMD ["mocha", "/test/src/tests"]
+CMD XUNIT_FILE=test-reports/mocha-results.xml mocha -R xunit-file src/tests/
