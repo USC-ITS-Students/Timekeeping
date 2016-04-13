@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<testsuite name="PhantomJS 2.1.1 (Mac OS X 0.0.0)" package="" timestamp="2016-04-13T01:27:27" id="0" hostname="Kevins-MacBook-Pro.local" tests="12" errors="0" failures="0" time="0.06">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1"/>
+  </properties>
+  <testcase name="should load employee data and their timesheet data for the given year" time="0.019" classname="Data Loader Service"/>
+  <testcase name="should loadData" time="0.007" classname="DetailController"/>
+  <testcase name="goToOverview" time="0.004" classname="DetailController"/>
+  <testcase name="should generateRange(n))" time="0.005" classname="DetailController"/>
+  <testcase name="should generateWeekDates(start)" time="0.004" classname="DetailController"/>
+  <testcase name="should populateHours())" time="0.003" classname="DetailController"/>
+  <testcase name="should generateHoursTable(week))" time="0.004" classname="DetailController"/>
+  <testcase name="should loadData" time="0.003" classname="OverviewController"/>
+  <testcase name="should calculateTotalHours(timesheets)" time="0.003" classname="OverviewController"/>
+  <testcase name="should calculateYearsWorked(earliestYearWorked, latestYearWorked)" time="0.002" classname="OverviewController"/>
+  <testcase name="should getPeriodDetail(timesheet_index)" time="0.003" classname="OverviewController"/>
+  <testcase name="should call location.url method onChange()" time="0.003" classname="OverviewController"/>
+  <system-out>
+    <![CDATA[
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>

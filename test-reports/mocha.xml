@@ -1,0 +1,4 @@
+<testsuite name="Mocha Tests" tests="2" failures="0" errors="0" skipped="0" timestamp="2016-04-13T04:17:33" time="1.763">
+<testcase classname="Models TimesheetModel #getByYear(owner, year, callback)" name="should return only timesheets with end dates from the specified year" time="1.11"/>
+<testcase classname="Models TimsheetModel #getByYear(owner, year, callback)" name="should return only timesheets with end dates from the specified year" time="0.629"/>
+</testsuite>
