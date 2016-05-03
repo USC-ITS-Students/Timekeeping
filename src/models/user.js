@@ -26,6 +26,7 @@ UserSchema.statics.login = function(empid, password, cb){
         }
     };
 
+//Search employee by mongodb id
 UserSchema.statics.getById = function(id, cb){
     this.findById(id, function(err, docs){
         if(typeof cb === 'function'){
@@ -37,6 +38,19 @@ UserSchema.statics.getById = function(id, cb){
     });
 };
 
+//Search employee by empid
+UserSchema.statics.getEmployeeById = function(empid, cb){
+    this.findOne({empid:empid}, function(err, docs){
+        if(typeof cb === 'function'){
+            if(err) cb(err);
+            else{
+                cb(null, docs);
+            }
+        }
+    });
+};
+
+//Get group of employees
 UserSchema.statics.getEmployeesByIDs = function(ids, cb){
     query={
         empid:{"$in":ids}

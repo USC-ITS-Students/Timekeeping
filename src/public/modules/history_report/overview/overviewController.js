@@ -2,15 +2,21 @@
     'use strict';
 
     angular.module('app').controller('overviewController', ['$scope', '$location', '$routeParams', 'DataLoader', function ($scope, $location, $routeParams,  DataLoader) {
+        
         var year = parseInt($routeParams.year);
+        var empid = $routeParams.employee;
+
         $scope.selectedYear =  parseInt(year); // model for select year dropdown
         // load data if needed
-        DataLoader.load(year, function(err){
-            if(err) console.log(err);
+        DataLoader.load(year, empid, function(err){
+            if(err){
+                console.log(err);
+                $location.url('/login');
+            }
             else{
                 // check if user entered a valid year, if not then redirect them to the latest year they worked
                 if(!year || year < $scope.employee.earliestYearWorked || year > $scope.employee.latestYearWorked){
-                    $location.url('/history/'+$scope.employee.latestYearWorked);
+                    $location.url('/history/'+$scope.employee.empid+'/'+$scope.employee.latestYearWorked);
                 }
 
                 // genearate total hours
@@ -28,12 +34,12 @@
 
         //Get Timesheet Detail
         $scope.getPeriodDetail = function (timesheet_index) {
-            $location.path('/details/' + year + '/' +  timesheet_index.toString());
+            $location.path('/details/'+empid+'/'+ year + '/' +  timesheet_index.toString());
         };
 
         // Is called when user selects a new year in the select year dropdown
         $scope.onChange = function(){
-            $location.url('/history/' + $scope.selectedYear);
+            $location.url('/history/'+ empid+'/'+ $scope.selectedYear);
         };
 
         // returns an array of all of the total hours per type and grand total

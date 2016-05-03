@@ -23,6 +23,7 @@ var TimesheetSchema = new mongoose.Schema({
     week: []
 });
 
+//Get an employee timesheets in a given year
 TimesheetSchema.statics.getByYear = function(owner, year, cb){
     if(typeof year !== 'number'){
         year = parseInt(year);
@@ -44,6 +45,7 @@ TimesheetSchema.statics.getByYear = function(owner, year, cb){
     });
 };
 
+//Get all supervisor employees
 TimesheetSchema.statics.getEmployeesByTimesheetApprover = function(approverid, cb){
     query = {
         'week.positions.approverid':''+approverid+''
@@ -58,7 +60,21 @@ TimesheetSchema.statics.getEmployeesByTimesheetApprover = function(approverid, c
     });
 };
 
-
+//Find employee by supervisor
+TimesheetSchema.statics.findEmployeebyTimesheetApprover = function(approverid, empid, cb){
+    query = {
+        owner:empid,
+        'week.positions.approverid':''+approverid+''
+    };
+    this.findOne(query,'owner', function(err, docs){
+        if(typeof cb === 'function'){
+            if(err) cb(err);
+            else{
+                cb(null, docs)
+            }
+        }
+    });
+};
 
 // Exports ---
 module.exports = mongoose.model('Timesheet', TimesheetSchema);

@@ -5,7 +5,9 @@
         // If the user is already logged in redirect them to the history overview page
         $http.get('/auth/checkloggedin').then(
             function(){
-                $location.url('/history');
+                $http.get('api/users/getLoggedIn').then(function (res) {
+                    $location.url('/history/'+res.data.empid+'/0');
+                });                
             }
         );
 
@@ -20,7 +22,7 @@
                     .then(
                         function(res){ // this function is called upon receiving a success status
                             // redirect to history overview page
-                            $location.url('/history/'+res.data.latestYearWorked.toString());
+                            $location.url('/history/'+$scope.empid+'/'+res.data.latestYearWorked.toString());
                         },
                         function(){ // this function is called upon receiving an unsuccessful status
                             // display error message

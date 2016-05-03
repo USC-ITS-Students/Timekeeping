@@ -27,29 +27,15 @@
         $routeProvider
         // route for the login page
             .when('/', {
-                redirectTo:'/history/0'
+                redirectTo:'/login'
             })
             .when('/login', {
                 templateUrl : 'modules/login/login.html',
                 controller :  'loginController'
             })
-            .when('/details/:year/:timesheet', {
-                templateUrl: 'modules/history_report/detail/timesheet_history_detail.html',
-                controller:  'detailController',
-                resolve: {
-                    loggedin: checkloggedin
-                }
-            })
-            .when('/history/:year', {
+            .when('/history/:employee/:year', {
                 templateUrl: 'modules/history_report/overview/timesheet_history.html',
                 controller:  'overviewController',
-                resolve: {
-                    loggedin: checkloggedin
-                }
-            })
-            .when('/supervisor', {
-                templateUrl: 'modules/supervisor/employee_overview.html',
-                controller:  'supervisorController',
                 resolve: {
                     loggedin: checkloggedin
                 }
@@ -61,9 +47,23 @@
                     loggedin: checkloggedin
                 }
             })
+            .when('/details/:employee/:year/:timesheet', {
+                templateUrl: 'modules/history_report/detail/timesheet_history_detail.html',
+                controller:  'detailController',
+                resolve: {
+                    loggedin: checkloggedin
+                }
+            })
+            .when('/supervisor/:employee', {
+                templateUrl: 'modules/supervisor/employee_overview.html',
+                controller:  'supervisorController',
+                resolve: {
+                    loggedin: checkloggedin
+                }
+            })
             // Default
             .otherwise({
-                redirectTo: '/history/0'
+                redirectTo:'/'
             });
     });
 })();

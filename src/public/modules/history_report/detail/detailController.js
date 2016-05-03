@@ -3,10 +3,13 @@
 
     angular.module('app')
         .controller('detailController', ['$scope', '$location', '$routeParams', '$filter', 'DataLoader', function ($scope, $location, $routeParams, $filter, DataLoader) {
-
+            var empid = $routeParams.employee;
             // load data if needed
-            DataLoader.load($routeParams.year, function(err){
-                if(err) console.log(err);
+            DataLoader.load($routeParams.year, empid, function(err){
+               if(err){
+                    console.log(err);
+                    $location.url('/login');
+                }
                 else{
                     var weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                     $scope.timesheet = $filter('orderBy')($scope.timesheets, '-end')[$routeParams.timesheet - 1];
