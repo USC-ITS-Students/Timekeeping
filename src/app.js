@@ -9,17 +9,14 @@ var app = express();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var cookieSession = require('cookie-session');
+var env = require('./env');
 
-var dbhost = 'localhost';
-if(process.argv[2] === 'production'){
-    dbhost = 'db';
-}
+mongoose.connect(env.db.connectionString());
 
-mongoose.connect(dbhost + ':27017/Timesheet');
 var User =  require('./models').UserModel;
 
 // Don't serve front-end in production, nginx serves public
-if(process.argv[2] !== 'production'){
+if(env.environment !== 'production'){
     app.use(express.static(__dirname + '/public'));
 }
 

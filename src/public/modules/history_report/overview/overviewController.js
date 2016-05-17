@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('app').controller('overviewController', ['$scope', '$location', '$routeParams', 'DataLoader', function ($scope, $location, $routeParams,  DataLoader) {
-        
+
         var year = parseInt($routeParams.year);
         var empid = $routeParams.employee;
 
@@ -70,7 +70,10 @@
                 timesheets
                     // map each timesheet to the sum of the grandtotals of both of its weeks
                     .map(function(ts){
-                        return ts.week[0].grandTotal.total + ts.week[1].grandTotal.total;
+                        var sum = 0;
+                        if(ts.week[0].grandTotal) sum += ts.week[0].grandTotal;
+                        if(ts.week[1].grandTotal) sum += ts.week[1].grandTotal;
+                        return sum;
                     })
                     // add all of the grand totals together
                     .reduce(function(prev, curr){
@@ -92,4 +95,3 @@
 
     }]);
 })();
-

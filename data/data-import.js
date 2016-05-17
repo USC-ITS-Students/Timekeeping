@@ -14,16 +14,15 @@ var parser = require('csv-parse'),
     MongoClient = require('mongodb'),
     assert = require('assert'),
     argv = require('minimist')(process.argv.slice(2));
-    //console.dir(argv);
 
     var HelpMenu = "Help Menu:\n" +
             "---------------\n" +
-            "-f: Main header .csv file;       should be placed in same folder as this script         **Required**\n" +
-            "-e: Earn summary .csv file;      should be placed in same folder as this script         **Required**\n" +
-            "-s: Sanctions .csv file;         should be placed in same folder as this script         **Required**\n" +
-            "-t: Time .csv file;              should be placed in same folder as this script         **Required**\n" +
-            "-p: Principal Prop .csv file;    should be placed in same folder as this script         **Required**\n" +
-            "-c: Mongodb connection string;   'mongodb://localhost:27017/Timesheet' by default\n" +
+            "-f: Main header .csv file;       **Required**\n" +
+            "-e: Earn summary .csv file;      **Required**\n" +
+            "-s: Sanctions .csv file;         **Required**\n" +
+            "-t: Time .csv file;              **Required**\n" +
+            "-p: Principal Prop .csv file;    **Required**\n" +
+            "-c: Mongodb connection string;   'mongodb://localhost:27017/Timekeeping' by default\n" +
             "-h or --help: This menu.";
 
 // Check if help flag was entered
@@ -72,20 +71,14 @@ function main(){
         .then(function(merged_data){
             // connect to database
             if(!connectionString){
-                connectionString = "mongodb://localhost:27017/Timesheet";
+                connectionString = "mongodb://localhost:27017/Timekeeping";
             }
 
             MongoClient.connect(connectionString, {native_parser:true}, function(err, db) {
                 assert.equal(null, err);
 
-                // don't include docid when inserting to mongo
-                merged_data.timesheets.forEach(function(timesheet){
-                    delete timesheet.docid;
-                });
-
-                console.log(merged_data.timesheets);
                 // insert to db
-                Q.when([
+                Q.all([
                     // insert employees
                     db.collection('users').insert(merged_data.employees),
                     // insert timesheets
@@ -112,11 +105,11 @@ function main(){
 // MAIN PARSE FUNCTION: parses the data from csv files and turns them into js objects
 function parse() {
     return Q.all([
-        parseHeader(__dirname + '/' + headerFile),
-        parseEarnSummary(__dirname + '/' + earnSummaryFile),
-        parseSanctions(__dirname + '/' + sanctionsFile),
-        parseTime(__dirname + '/' + timeFile),
-        parseProperties(__dirname + '/' + propertiesFile)
+        parseHeader(headerFile),
+        parseEarnSummary(earnSummaryFile),
+        parseSanctions(sanctionsFile),
+        parseTime(timeFile),
+        parseProperties(propertiesFile)
     ]).then(function(callbacks){
         var data = {};
 
@@ -143,7 +136,7 @@ function parse() {
 
 // MAIN MERGE FUNCTION: merges the summaries, sanctions and times into corresponding timesheets
 function merge(data){
-    return Q.when([
+    return Q.all([
         mergeEmployeesInfo(data.employees, data.properties),
         mergeSummaries(data.timesheets, data.summaries),
         mergeSanctions(data.timesheets, data.sanctions),
@@ -473,11 +466,7 @@ function mergeEmployeesInfo(employees, properties){
                 if(employees[i].empid === property.empid){
                     employeeFound = true;
                     employees[i].principal_id = property.principal_id;
-                    console.log('Found properties empid: "' + property.empid + '"in employees!');
                 }
-            }
-            if(!employeeFound){
-                //console.log('Could not find properties empid: "' + property.empid + '"in employees!');
             }
         },
         // when done:

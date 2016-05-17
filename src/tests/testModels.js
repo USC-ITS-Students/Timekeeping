@@ -14,31 +14,6 @@ describe('Models', function(){
         done();
     });
 
-    // describe('UserModel', function(){
-    //     describe('#login(empid, user, callback)', function(){
-    //         var User = models.UserModel;
-    //         it('should return user upon succesful login', function(done){
-    //             var empid = '1234567',
-    //                 password = 'test123';
-    //             User.login(empid, password, function(err, user){
-    //                 expect(err).to.not.be.ok;
-    //                 expect(user).to.be.ok;
-    //                 done();
-    //             });
-    //         });
-
-    //         it('should return null upon unsuccesful login', function(done){
-    //             var empid = '1234567',
-    //                 password = 'wrongpassword';
-    //             User.login(empid, password, function(err, user){
-    //                 expect(user).to.not.be.ok;
-    //                 expect(err).to.be.ok;
-    //                 done();
-    //             });
-    //         });
-    //     });
-    // });
-
     describe('TimesheetModel', function(){
         this.timeout(5000);
         var Timesheet = models.TimesheetModel;

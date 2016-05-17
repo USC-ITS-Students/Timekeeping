@@ -10,7 +10,7 @@ var UserSchema = new mongoose.Schema({
 });
 
 UserSchema.statics.login = function(empid, password, cb){
-        if(password === 'test123'){//5678901
+        if(password === 'test123'){
             this.findOne({empid:empid}, function(err, docs){
                 if(typeof cb === 'function'){
                     if(err) cb(err);

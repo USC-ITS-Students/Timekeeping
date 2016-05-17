@@ -31,6 +31,7 @@
     "angular-mocks": "^1.4.7",
     "angular-route": "^1.4.9",
     "chai": "^3.4.1",
+    "csv-parse": "^1.1.0",
     "grunt": "^0.4.5",
     "grunt-karma": "^0.12.1",
     "jasmine": "^2.3.2",

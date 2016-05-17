@@ -13,33 +13,15 @@ node1:
   dockerfile: Docker-Node
   ports:
      - "3000"
-  links:
-   - db:db
 
 node2:
   build: .
   dockerfile: Docker-Node
   ports:
      - "3000"
-  links:
-   - db:db
 
 node3:
   build: .
   dockerfile: Docker-Node
   ports:
      - "3000"
-  links:
-   - db:db
-
-db:
-  image: mongo
-  ports:
-   - "27017"
-
-# Only Run dbimport for first time building environment or if adding new data.
-dbimport:
-  build: data/.
-  links:
-   - db:db
-  command: node DataImport.js -f header.csv -e earn_summary.csv -s sanctions.csv -t time.csv -c mongodb://db:27017/Timesheet
