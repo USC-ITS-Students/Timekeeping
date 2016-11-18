@@ -23,4 +23,5 @@ node_modules
 **.log
 # test-reports
 **.csv
+!data/*.csv
 data/bin
