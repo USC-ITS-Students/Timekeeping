@@ -38,9 +38,7 @@ var headerFile = argv.f,
     timeFile = argv.t,
     propertiesFile = argv.p,
     connectionString = argv.c;
-var approvers = [];
-var employees = [];
-var properties = [];
+
 // check if all required arguments have been given
 if(headerFile && earnSummaryFile && sanctionsFile && timeFile && propertiesFile){
     // Start program
@@ -49,7 +47,6 @@ if(headerFile && earnSummaryFile && sanctionsFile && timeFile && propertiesFile)
     console.log(HelpMenu);
     return;
 }
-
 
 // ************ //
 // *** MAIN *** //
@@ -74,7 +71,7 @@ function main(){
         .then(function(merged_data){
             // connect to database
             if(!connectionString){
-                connectionString = "mongodb://localhost:27017/Timekeeping2";
+                connectionString = "mongodb://localhost:27017/Timekeeping";
             }
 
             MongoClient.connect(connectionString, {native_parser:true}, function(err, db) {
@@ -113,7 +110,6 @@ function parse() {
         parseSanctions(sanctionsFile),
         parseTime(timeFile),
         parseProperties(propertiesFile)
-
     ]).then(function(callbacks){
         var data = {};
 
@@ -144,8 +140,7 @@ function merge(data){
         mergeEmployeesInfo(data.employees, data.properties),
         mergeSummaries(data.timesheets, data.summaries),
         mergeSanctions(data.timesheets, data.sanctions),
-        mergeTimes(data.timesheets, data.times),
-        mergeApprovers(data.employees)
+        mergeTimes(data.timesheets, data.times)
     ]).then(function(){
         return data;
     });
@@ -202,12 +197,10 @@ function parseProperties(file){
         })
 }
 
-
-
 // PROCESS FUNCTIONS: Turn parsed csv files into JS Objects ready to be merged
 function processHeader(data){
     return Q(function(resolve, reject){
-
+        var employees = [];
         var timesheets = [];
         async.each(
             data, // array of rows
@@ -243,8 +236,7 @@ function processHeader(data){
                     firstname: name.slice(0, name.indexOf(',')),
                     lastname: name.slice(name.indexOf(',')+2, name.length),
                     latestYearWorked: enddate.getFullYear(),
-                    earliestYearWorked: enddate.getFullYear(),
-                    docid:docid
+                    earliestYearWorked: enddate.getFullYear()
                 };
 
                 // check if we need to push the employee or update
@@ -421,47 +413,6 @@ function processTime(data){
                     approverid: approverid,
                     status: status
                 };
-                var employeeID;
-
-                for(var i = 0; i < employees.length; i++){
-                    if(employees[i].docid === docid){
-                        employeeID=employees[i].empid;
-
-                    }
-                }
-                var empIDs=[];
-                empIDs.push(employeeID)
-                var approver ={
-                    empid:approverid,
-                    supervisee:empIDs
-                }
-                if (approvers.length==0){
-                    approvers.push(approver);
-
-                }
-                var approverFound = false;
-                var empFound = false;
-                for(var i = 0; i < approvers.length; i++){
-                    if(approvers[i].empid === approverid){
-                        approverFound = true;
-
-                        for (var j=0 ; j< approvers[i].supervisee.length; j++)
-                        {
-                            if (approvers[i].supervisee[j]===employeeID)
-                            {
-                                empFound=true;
-                            }
-                        }
-                        if(!empFound){
-
-                            approvers[i].supervisee.push(employeeID);
-                        }
-                    }
-                }
-                if(!approverFound){
-                    approvers.push(approver);
-                }
-
 
                 times.push(time);
                 callback();
@@ -477,7 +428,7 @@ function processTime(data){
 
 function processProperties(data){
     return Q(function(resolve, reject){
-
+        var properties = [];
         async.each(
             data, // array of rows
             // function to apply on each row
@@ -515,30 +466,6 @@ function mergeEmployeesInfo(employees, properties){
                 if(employees[i].empid === property.empid){
                     employeeFound = true;
                     employees[i].principal_id = property.principal_id;
-                }
-            }
-        },
-        // when done:
-        function(err){
-            if(err) console.log(err);
-        }
-    );
-}
-
-// MERGE FUNCTIONS: After parsing in the data, the data is all merged into two types of objects, timesheets and employees
-function mergeApprovers(employees){
-    // merge principal id with employee
-    async.each(
-        approvers,
-        function(approver){
-
-            console.log( approver.empid);
-            var employeeFound = false;
-            for(var i = 0; i < employees.length; i++){
-                if(employees[i].empid === approver.empid){
-
-                    employeeFound = true;
-                    employees[i].supervisees = approver.supervisee;
                 }
             }
         },
