@@ -8,7 +8,7 @@ if(process.argv[2] === 'production'){
   db.port = 27017; // local port
 }
 db.connectionString = function(){
-  return 'mongodb://'+this.host+':'+this.port+'/Timekeeping';
+  return 'mongodb://'+this.host+':'+this.port+'/Timekeeping2';
 };
 // </Database>
 
