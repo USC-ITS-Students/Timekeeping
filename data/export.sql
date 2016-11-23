@@ -25,11 +25,12 @@ FIELDS TERMINATED BY ','
   ENCLOSED BY '"'
 LINES TERMINATED BY '\n';
 
-select d.document_id,d.day_in_week,d.hours1,d.hours2,r.week_number,r.row,r.account_name,r.earn_code,r.earn_code_description,r.approver_name,r.approver_id,r.routing_status
+select d.document_id,d.day_in_week,d.hours1,d.hours2,r.week_number,r.row,r.account_name,r.earn_code,r.earn_code_description,r.approver_name,pp.employee_id,r.routing_status
 from tk_timesheet_history_time_capture_date_t d
   LEFT JOIN tk_timesheet_history_time_capture_row_t r on d.time_capture_row_id=r.id
   LEFT outer JOIN tk_timesheet_history_header_t h on d.document_id=h.document_id
   left OUTER JOIN tk_timesheet_history_personal_information_t p on p.id=h.personal_information_id
+  left OUTER JOIN t2wd.tk_principal_properties_t pp ON r.approver_id=pp.principal_id
 INTO OUTFILE 'time.csv'
 FIELDS TERMINATED BY ','
   ENCLOSED BY '"'
