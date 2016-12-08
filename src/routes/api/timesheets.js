@@ -35,7 +35,7 @@ router.get('/:empid/:year',function(req, res){
             }
             else{
                 //user trying to access another employees timesheets, check if its supervisor
-                Timesheet.findEmployeebyTimesheetApprover(req.user.principal_id, id, function(err, employee){
+               /* Timesheet.findEmployeebyTimesheetApprover(req.user.principal_id, id, function(err, employee){
                     if(err) res.sendStatus(400);
                     else{
                         if(employee){     
@@ -49,6 +49,13 @@ router.get('/:empid/:year',function(req, res){
                         else{
                             res.sendStatus(401);
                         }
+                    }
+                });
+                */
+                Timesheet.getByYear(req.params.empid, req.params.year, function(err, docs){
+                    if(err) res.sendStatus(400);
+                    else{
+                        res.json(docs);
                     }
                 });
             }

@@ -1,11 +1,14 @@
 /*
-*** USC Timekeeping csv-to-mongodb parser ***
-        Author: Daniel K. Arellano
-        Email: dkarella@usc.edu
-        Organization: USC ITS
+ *** USC Timekeeping csv-to-mongodb parser ***
+ * Original
+ Author: Daniel K. Arellano
+ Email: dkarella@usc.edu
+ Organization: USC ITS
+
+ * Modified on 12/7/2016
+   By : Sanjana Moody, sanjanam@usc.edu
+
  */
-
-
 // Includes
 var parser = require('csv-parse'),
     fs = require('fs'),
@@ -15,15 +18,15 @@ var parser = require('csv-parse'),
     assert = require('assert'),
     argv = require('minimist')(process.argv.slice(2));
 
-    var HelpMenu = "Help Menu:\n" +
-            "---------------\n" +
-            "-f: Main header .csv file;       **Required**\n" +
-            "-e: Earn summary .csv file;      **Required**\n" +
-            "-s: Sanctions .csv file;         **Required**\n" +
-            "-t: Time .csv file;              **Required**\n" +
-            "-p: Principal Prop .csv file;    **Required**\n" +
-            "-c: Mongodb connection string;   'mongodb://localhost:27017/Timekeeping' by default\n" +
-            "-h or --help: This menu.";
+var HelpMenu = "Help Menu:\n" +
+    "---------------\n" +
+    "-f: Main header .csv file;       **Required**\n" +
+    "-e: Earn summary .csv file;      **Required**\n" +
+    "-s: Sanctions .csv file;         **Required**\n" +
+    "-t: Time .csv file;              **Required**\n" +
+    "-p: Principal Prop .csv file;    **Required**\n" +
+    "-c: Mongodb connection string;   'mongodb://localhost:27017/Timekeeping' by default\n" +
+    "-h or --help: This menu.";
 
 // Check if help flag was entered
 if(argv.h || argv.help){
@@ -38,7 +41,9 @@ var headerFile = argv.f,
     timeFile = argv.t,
     propertiesFile = argv.p,
     connectionString = argv.c;
-
+var approvers = [];
+var employees = [];
+var properties = [];
 // check if all required arguments have been given
 if(headerFile && earnSummaryFile && sanctionsFile && timeFile && propertiesFile){
     // Start program
@@ -47,6 +52,7 @@ if(headerFile && earnSummaryFile && sanctionsFile && timeFile && propertiesFile)
     console.log(HelpMenu);
     return;
 }
+
 
 // ************ //
 // *** MAIN *** //
@@ -110,6 +116,7 @@ function parse() {
         parseSanctions(sanctionsFile),
         parseTime(timeFile),
         parseProperties(propertiesFile)
+
     ]).then(function(callbacks){
         var data = {};
 
@@ -140,7 +147,8 @@ function merge(data){
         mergeEmployeesInfo(data.employees, data.properties),
         mergeSummaries(data.timesheets, data.summaries),
         mergeSanctions(data.timesheets, data.sanctions),
-        mergeTimes(data.timesheets, data.times)
+        mergeTimes(data.timesheets, data.times),
+        mergeApprovers(data.employees)
     ]).then(function(){
         return data;
     });
@@ -197,10 +205,12 @@ function parseProperties(file){
         })
 }
 
+
+
 // PROCESS FUNCTIONS: Turn parsed csv files into JS Objects ready to be merged
 function processHeader(data){
     return Q(function(resolve, reject){
-        var employees = [];
+
         var timesheets = [];
         async.each(
             data, // array of rows
@@ -236,7 +246,8 @@ function processHeader(data){
                     firstname: name.slice(0, name.indexOf(',')),
                     lastname: name.slice(name.indexOf(',')+2, name.length),
                     latestYearWorked: enddate.getFullYear(),
-                    earliestYearWorked: enddate.getFullYear()
+                    earliestYearWorked: enddate.getFullYear(),
+                    docid:docid
                 };
 
                 // check if we need to push the employee or update
@@ -413,6 +424,47 @@ function processTime(data){
                     approverid: approverid,
                     status: status
                 };
+                var employeeID;
+
+                for(var i = 0; i < employees.length; i++){
+                    if(employees[i].docid === docid){
+                        employeeID=employees[i].empid;
+
+                    }
+                }
+                var empIDs=[];
+                empIDs.push(employeeID)
+                var approver ={
+                    empid:approverid,
+                    supervisee:empIDs
+                }
+                if (approvers.length==0){
+                    approvers.push(approver);
+
+                }
+                var approverFound = false;
+                var empFound = false;
+                for(var i = 0; i < approvers.length; i++){
+                    if(approvers[i].empid === approverid){
+                        approverFound = true;
+
+                        for (var j=0 ; j< approvers[i].supervisee.length; j++)
+                        {
+                            if (approvers[i].supervisee[j]===employeeID)
+                            {
+                                empFound=true;
+                            }
+                        }
+                        if(!empFound){
+
+                            approvers[i].supervisee.push(employeeID);
+                        }
+                    }
+                }
+                if(!approverFound){
+                    approvers.push(approver);
+                }
+
 
                 times.push(time);
                 callback();
@@ -428,7 +480,7 @@ function processTime(data){
 
 function processProperties(data){
     return Q(function(resolve, reject){
-        var properties = [];
+
         async.each(
             data, // array of rows
             // function to apply on each row
@@ -466,6 +518,31 @@ function mergeEmployeesInfo(employees, properties){
                 if(employees[i].empid === property.empid){
                     employeeFound = true;
                     employees[i].principal_id = property.principal_id;
+                }
+            }
+        },
+        // when done:
+        function(err){
+            if(err) console.log(err);
+        }
+    );
+}
+
+// MERGE FUNCTIONS: After parsing in the data, the data is all merged into two types of objects, timesheets and employees
+function mergeApprovers(employees){
+    // merge principal id with employee
+    async.each(
+        approvers,
+        function(approver){
+
+            console.log( approver.empid);
+            var employeeFound = false;
+            for(var i = 0; i < employees.length; i++){
+                if(employees[i].empid === approver.empid){
+
+                    employeeFound = true;
+                    employees[i].supervisees = approver.supervisee;
+                    employees[i].type = "supervisor";
                 }
             }
         },

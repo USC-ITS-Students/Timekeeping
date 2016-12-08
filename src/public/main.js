@@ -54,8 +54,15 @@
                     loggedin: checkloggedin
                 }
             })
-            .when('/supervisor/:employee', {
-                templateUrl: 'modules/supervisor/employee_overview.html',
+            .when('/supervisor/:employee/:year', {
+                templateUrl: 'modules/supervisor/supervisor_overview.html',
+                controller:  'supervisorController',
+                resolve: {
+                    loggedin: checkloggedin
+                }
+            })
+            .when('/supervisor/:employee/0', {
+                templateUrl: 'modules/supervisor/supervisor_overview.html',
                 controller:  'supervisorController',
                 resolve: {
                     loggedin: checkloggedin

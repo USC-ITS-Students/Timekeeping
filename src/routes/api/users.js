@@ -6,7 +6,7 @@ router.get('/getLoggedIn',
     function(req, res){
         // check if user is logged in
         if(req.isAuthenticated()){
-            res.send(req.user);
+           res.send(req.user);
         }else{
             res.sendStatus(401);
         }
@@ -21,7 +21,7 @@ router.get('/:empid/supervisees',function(req, res){
         // check if id is their own
         if(id === req.user.empid){
             //get employees who have a supervisor with a given approverid
-            Timesheet.getEmployeesByTimesheetApprover(req.user.principal_id, function(err, docs){
+         /*   Timesheet.getEmployeesByTimesheetApprover(req.user.principal_id, function(err, docs){
                 if(err) res.sendStatus(400);
                 else{
                     
@@ -44,6 +44,13 @@ router.get('/:empid/supervisees',function(req, res){
                         res.sendStatus(204);
                     }
                 }
+            });*/
+
+            User.getAllEmployees(id, function(err, result){
+                if(err) res.sendStatus(400);
+                else{
+                    res.json(result);
+                }
             });
         } 
         else{
@@ -64,7 +71,7 @@ router.get('/:empid',
                 res.send(req.user);
             } 
             else{
-                Timesheet.findEmployeebyTimesheetApprover(req.user.principal_id, id, function(err, employee){
+              /*  Timesheet.findEmployeebyTimesheetApprover(req.user.principal_id, id, function(err, employee){
                     if(err) res.sendStatus(400);
                     else{
                         if(employee){                        
@@ -78,6 +85,12 @@ router.get('/:empid',
                         else{
                             res.sendStatus(401);
                         }
+                    }
+                });*/
+                User.getEmployeeById(id, function(err, result){
+                    if(err) res.sendStatus(400);
+                    else{
+                        res.send(result);
                     }
                 });
             }

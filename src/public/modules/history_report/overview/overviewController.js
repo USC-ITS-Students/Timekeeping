@@ -6,6 +6,7 @@
         var year = parseInt($routeParams.year);
         var empid = $routeParams.employee;
 
+
         $scope.selectedYear =  parseInt(year); // model for select year dropdown
         // load data if needed
         DataLoader.load(year, empid, function(err){
@@ -15,11 +16,12 @@
             }
             else{
                 // check if user entered a valid year, if not then redirect them to the latest year they worked
-                if(!year || year < $scope.employee.earliestYearWorked || year > $scope.employee.latestYearWorked){
+             /*   if(!year || year < $scope.employee.earliestYearWorked || year > $scope.employee.latestYearWorked){
                     $location.url('/history/'+$scope.employee.empid+'/'+$scope.employee.latestYearWorked);
-                }
+                }*/
 
                 // genearate total hours
+
                 if($scope.timesheets.length > 0){
                     $scope.total_hours = $scope.calculateTotalHours($scope.timesheets);
                 }else{

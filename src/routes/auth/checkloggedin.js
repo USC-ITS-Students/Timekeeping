@@ -6,7 +6,7 @@ router.get('/', function(req, res){
         res.sendStatus(200);
     }else {
         // user is logged in
-        res.sendStatus(401);
+       res.sendStatus(401);
     }
 });
 
