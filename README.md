@@ -33,7 +33,7 @@ node data/data-import.js -h
 - Import the .csv files
   - Example:
 ```
-node data-import.js -f header.csv -e earn_summary.csv -s sanctions.csv -p principal_properies.csv -t time.csv
+node data-import.js -f header.csv -e earn_summary.csv -s sanctions.csv -p principal_properties.csv -t time.csv
 ```
 - Check for "Successfully written to the db" message on console after the import
 
