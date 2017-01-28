@@ -486,11 +486,13 @@ function processProperties(data){
             // function to apply on each row
             function(doc, callback){
                 var principal_id = doc[0],
-                    empid = doc[20];
+                    empid = doc[20],
+                    empType = doc[1];
 
                 var property = {
                     empid: empid,
-                    principal_id: principal_id
+                    principal_id: principal_id,
+                    type:empType
                 };
 
                 properties.push(property);
@@ -518,6 +520,7 @@ function mergeEmployeesInfo(employees, properties){
                 if(employees[i].empid === property.empid){
                     employeeFound = true;
                     employees[i].principal_id = property.principal_id;
+                    employees[i].type = property.type;
                 }
             }
         },

@@ -15,9 +15,9 @@
         </table>
             <div ng-repeat="supervisee in employee.supervisees">
                 <div ng-repeat="emp in supervisorEmployees">
-                    <div ng-if="supervisee == emp.empid">
-                                 <p class="font-bold"><a style=" min-width: 400px "  ng-click="getDetails(supervisee,emp.latestYearWorked)">{{supervisee}}</a>
-                                 <a style="margin-left: 400px " ng-click="getDetails(supervisee, emp.latestYearWorked)">{{emp.firstname}} {{emp.lastname}}</a></p>
+                    <div class="employee-list" ng-if="supervisee == emp.empid">
+                                 <p class="font-bold employee-id"><a style=" min-width: 400px "  ng-click="getDetails(supervisee,emp.latestYearWorked)">{{supervisee}}</a>
+                                 <a class="employee-name" style="margin-left: 400px " ng-click="getDetails(supervisee, emp.latestYearWorked)">{{emp.firstname}} {{emp.lastname}}</a></p>
                     </div>
                 </div>
             </div>

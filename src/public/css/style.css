@@ -97,7 +97,7 @@ a:hover{
 #login{
     vertical-align: middle;
     padding-top:10%;
-    /*background-color:#990000;
+   /* background-color:#990000;
     position:absolute;
     top:0; right:0;
     bottom:0; left:0;*/
@@ -134,8 +134,41 @@ a:hover{
     color: #990000;
 }
 
+.employee-list {
+    width: 100%;
+}
+.employee-list .employee-id, .employee-list .employee-name {
+    width: 50%;
+    min-width: 400px;
+}
+
 #pay-detail-week, #pay-detail-week2, #overview{
     min-width:1200px;
     max-width:1330px;
     margin-left:0px;
+}
+
+[type="text"] {
+    margin: 0;
+    height: 100%;
+}
+
+.search-emp-id {
+   /* max-width: 100px;*/
+    display: inline-block;
+}
+
+.search-emp-fname, .search-emp-lname {
+   /* max-width: 120px;*/
+    display: inline-block;
+}
+
+.search-emp-label {
+    display: inline;
+    font-size: 12px;
+}
+
+.search-button {
+    margin: auto;
+    width: 100px;
 }

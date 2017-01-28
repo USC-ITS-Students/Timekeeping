@@ -19,7 +19,7 @@ router.get('/:empid/supervisees',function(req, res){
 
         var id = req.params.empid;
         // check if id is their own
-        if(id === req.user.empid){
+
             //get employees who have a supervisor with a given approverid
          /*   Timesheet.getEmployeesByTimesheetApprover(req.user.principal_id, function(err, docs){
                 if(err) res.sendStatus(400);
@@ -52,7 +52,28 @@ router.get('/:empid/supervisees',function(req, res){
                     res.json(result);
                 }
             });
-        } 
+
+    }else{
+        res.sendStatus(401);
+    }
+});
+
+router.get('/:empid/admin',function(req, res){
+    // check if user is logged in
+    if(req.isAuthenticated()){
+
+        var id = req.params.empid;
+        // check if id is their own
+        if(id === req.user.empid){
+
+
+            User.getAllEmployees(id, function(err, result){
+                if(err) res.sendStatus(400);
+                else{
+                    res.json(result);
+                }
+            });
+        }
         else{
             res.sendStatus(401);
         }

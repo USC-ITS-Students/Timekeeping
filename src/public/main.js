@@ -68,6 +68,20 @@
                     loggedin: checkloggedin
                 }
             })
+            .when('/admin/:employee/0', {
+                templateUrl: 'modules/admin/admin_overview.html',
+                controller:  'adminController',
+                resolve: {
+                    loggedin: checkloggedin
+                }
+            })
+            .when('/admin/:employee/:year', {
+                templateUrl: 'modules/admin/admin_overview.html',
+                controller:  'adminController',
+                resolve: {
+                    loggedin: checkloggedin
+                }
+            })
             // Default
             .otherwise({
                 redirectTo:'/'

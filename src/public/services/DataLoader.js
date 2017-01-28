@@ -53,6 +53,15 @@
             }*/
         }
 
+        // this function deals with loading the employees managed by supervisor
+        function loadAdminEmployees(empid){
+            return $http.get('api/users/'+empid+'/admin').then(function (data) {
+                $rootScope.AdminEmployees = data.data;
+
+            });
+
+        }
+
         // this function deals with loading the timesheets for the given year
         function loadTimesheets(empid,year){
           /*  if(!$rootScope.timesheets || $rootScope.year !== year){
@@ -93,6 +102,21 @@
                 }
             );
 
+        }
+
+        this.loadAdmin =function (empid, cb){
+            $q.all([
+                loadEmployee(empid),
+                loadAdminEmployees(empid)
+
+            ]).then(
+                function(){
+                    if(typeof cb === 'function') cb(null);
+                },
+                function(err){
+                    if(typeof cb === 'function') cb(err);
+                }
+            );
         }
 
         this.loadSupervisor = function (year,empid,cb) {

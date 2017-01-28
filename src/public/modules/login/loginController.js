@@ -26,6 +26,10 @@
                             {
                                 $location.url('/supervisor/'+$scope.empid+'/'+res.data.latestYearWorked.toString());
                             }
+                            else if (res.data.type == 'Admin')
+                            {
+                                $location.url('/admin/'+$scope.empid+'/'+res.data.latestYearWorked.toString());
+                            }
                           else{
                                 $location.url('/history/'+$scope.empid+'/'+res.data.latestYearWorked.toString());
                             }
