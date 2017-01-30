@@ -5,21 +5,20 @@
             <tr><td class="font-bold">Employee Name</td><td>{{employee.firstname}} {{employee.lastname}}</td></tr>
             <tr><td class="font-bold">Employee ID Number</td><td>{{employee.empid}}</td></tr>
         </table>
+
         <table id="pay-period-table">
             <thead>
-            <tr>
-                <th>Employee ID</th>
-                <th align="center">Employee Name</th>
-            </tr>
-         </thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th align="center">Employee Name</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="supervisee in employee.supervisees">
+                    <tr ng-repeat="emp in supervisorEmployees" ng-if="supervisee == emp.empid">
+                        <td ><a ng-click="getDetails(supervisee,emp.latestYearWorked)">{{supervisee}}</a></td>
+                        <td> <a ng-click="getDetails(supervisee, emp.latestYearWorked)">{{emp.firstname}} {{emp.lastname}}</a></td>
+                    </tr>
+            </tbody>
         </table>
-            <div ng-repeat="supervisee in employee.supervisees">
-                <div ng-repeat="emp in supervisorEmployees">
-                    <div class="employee-list" ng-if="supervisee == emp.empid">
-                                 <p class="font-bold employee-id"><a style=" min-width: 400px "  ng-click="getDetails(supervisee,emp.latestYearWorked)">{{supervisee}}</a>
-                                 <a class="employee-name" style="margin-left: 400px " ng-click="getDetails(supervisee, emp.latestYearWorked)">{{emp.firstname}} {{emp.lastname}}</a></p>
-                    </div>
-                </div>
-            </div>
     </div>
 </div>
